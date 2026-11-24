@@ -14,6 +14,7 @@ export const GET: APIRoute = () => {
     { loc: `${siteUrl}/airports/`, priority: '0.9', changefreq: 'weekly' },
     { loc: `${siteUrl}/brands/`, priority: '0.9', changefreq: 'weekly' },
     { loc: `${siteUrl}/guides/`, priority: '0.9', changefreq: 'weekly' },
+    { loc: `${siteUrl}/articles/`, priority: '0.85', changefreq: 'weekly' },
     { loc: `${siteUrl}/risk-alerts/`, priority: '0.8', changefreq: 'weekly' },
     { loc: `${siteUrl}/about/`, priority: '0.7', changefreq: 'monthly' }
   ];
@@ -25,14 +26,21 @@ export const GET: APIRoute = () => {
     changefreq: 'weekly'
   }));
 
-  // 10 Independent tutorial guide pages
+  // Independent tutorial guide pages
   const guidePages = GUIDE_ARTICLES.map(g => ({
     loc: `${siteUrl}/guides/${g.slug}/`,
     priority: '0.8',
     changefreq: 'weekly'
   }));
 
-  const allPages = [...corePages, ...brandPages, ...guidePages];
+  // 3 Featured deep-dive article pages
+  const articlePages = [
+    { loc: `${siteUrl}/articles/airport-brand-guide/`, priority: '0.85', changefreq: 'weekly' },
+    { loc: `${siteUrl}/articles/airport-plan-guide/`, priority: '0.85', changefreq: 'weekly' },
+    { loc: `${siteUrl}/articles/airport-node-regions/`, priority: '0.85', changefreq: 'weekly' }
+  ];
+
+  const allPages = [...corePages, ...brandPages, ...guidePages, ...articlePages];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

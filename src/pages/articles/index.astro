@@ -1,0 +1,318 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GUIDE_ARTICLES } from '../../lib/guides-data.ts';
+
+const pageTitle = "机场精选深度专栏｜品牌盘点、套餐解析与节点地区详解 - 机场日志";
+const pageH1 = "机场精选深度专栏与专题文章";
+const pageDescription = "机场日志精选专题文章，汇集主流机场品牌全面盘点、套餐性价比全解析及全球节点地区与延迟详解，为您提供深度的网络中继加速决策参考。";
+const canonicalPath = "/articles/";
+
+const featuredArticles = [
+  {
+    slug: 'airport-brand-guide',
+    tag: '机场档案',
+    title: '主流机场品牌盘点：特色、定位与适用人群',
+    desc: '梳理当前主流机场的品牌特点、线路风格与适用场景，帮助你快速找到合适的服务。',
+    date: '2026-11-24',
+    url: '/articles/airport-brand-guide/',
+    image: '/images/card-airplane.webp'
+  },
+  {
+    slug: 'airport-plan-guide',
+    tag: '套餐信息',
+    title: '机场套餐如何选择？价格、流量与性价比全解析',
+    desc: '从套餐结构、流量策略、价格区间到适用场景，全面解析如何选择高性价比的机场套餐。',
+    date: '2026-11-24',
+    url: '/articles/airport-plan-guide/',
+    image: '/images/card-terminal.webp'
+  },
+  {
+    slug: 'airport-node-regions',
+    tag: '节点地区',
+    title: '机场节点地区详解：常见地区、延迟表现与使用建议',
+    desc: '系统介绍常见的节点地区分布、网络特点与使用建议，帮助你根据需求选择合适的线路。',
+    date: '2026-11-24',
+    url: '/articles/airport-node-regions/',
+    image: '/images/card-globe.webp'
+  }
+];
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: '首页',
+      item: 'https://jichangrizhi.blog/'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: '精选专栏',
+      item: 'https://jichangrizhi.blog/articles/'
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath={canonicalPath}
+  jsonLdSchema={[breadcrumbSchema]}
+>
+  <div class="articles-index-page">
+    <nav class="page-breadcrumbs container" aria-label="面包屑导航">
+      <ol class="breadcrumb-list">
+        <li><a href="/">首页</a></li>
+        <li class="separator">/</li>
+        <li aria-current="page">精选专栏</li>
+      </ol>
+    </nav>
+
+    <header class="page-header-banner">
+      <div class="container">
+        <div class="banner-badge-wrap">
+          <span class="badge-tag blue">精选深度专栏</span>
+        </div>
+        <h1 class="banner-main-h1">{pageH1}</h1>
+        <p class="banner-desc-p">{pageDescription}</p>
+      </div>
+    </header>
+
+    <main class="container articles-main">
+      <div class="featured-grid">
+        {featuredArticles.map(article => (
+          <a href={article.url} class="journal-card featured-card" aria-label={`查看 ${article.title}`}>
+            <div class="card-thumb">
+              {article.image ? (
+                <img src={article.image} alt={article.title} class="thumb-photo-img" loading="lazy" />
+              ) : (
+                <div class="thumb-fallback-gradient"></div>
+              )}
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="badge-tag blue">{article.tag}</span>
+              </div>
+              <h2 class="card-title">{article.title}</h2>
+              <p class="card-desc">{article.desc}</p>
+              <div class="card-footer">
+                <span class="card-date">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  {article.date}
+                </span>
+                <span class="card-arrow-icon">阅读全文 →</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="more-guides-callout journal-card">
+        <div class="callout-content">
+          <h3>查找更多基础客户端教程与实战配置？</h3>
+          <p>涵盖 Clash、Windows、macOS、iOS 小火箭、Android 客户端下载配置与故障排除。</p>
+        </div>
+        <a href="/guides/" class="btn-goto-guides">进入完整使用指南知识库 →</a>
+      </div>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .articles-index-page {
+    padding-bottom: 72px;
+  }
+  .page-breadcrumbs {
+    padding-top: 20px;
+    padding-bottom: 12px;
+  }
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--color-muted);
+  }
+  .breadcrumb-list a {
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .breadcrumb-list a:hover {
+    color: var(--color-primary);
+  }
+  .breadcrumb-list .separator {
+    color: var(--color-border);
+  }
+  .page-header-banner {
+    padding: 28px 0 36px 0;
+    background: linear-gradient(180deg, rgba(235, 243, 255, 0.6) 0%, rgba(248, 251, 255, 0) 100%);
+    border-bottom: 1px solid var(--color-border-light);
+    margin-bottom: 40px;
+  }
+  .banner-badge-wrap {
+    margin-bottom: 12px;
+  }
+  .banner-main-h1 {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--color-text-primary);
+    margin-bottom: 12px;
+  }
+  .banner-desc-p {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    max-width: 820px;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 900px) {
+    .featured-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .featured-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .featured-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .featured-card:hover {
+    transform: translateY(-3px);
+  }
+  .card-thumb {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    background: #E2E8F0;
+  }
+  .thumb-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .featured-card:hover .thumb-photo-img {
+    transform: scale(1.04);
+  }
+  .thumb-fallback-gradient {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+  }
+  .card-body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .card-meta {
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-title);
+    line-height: 1.45;
+    margin-bottom: 10px;
+    transition: color 0.25s ease;
+  }
+  .featured-card:hover .card-title {
+    color: var(--color-primary);
+  }
+  .card-desc {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border-light);
+  }
+  .card-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--color-light-muted);
+  }
+  .card-arrow-icon {
+    font-size: 0.88rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    transition: transform 0.25s ease;
+  }
+  .featured-card:hover .card-arrow-icon {
+    transform: translateX(4px);
+  }
+  .more-guides-callout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 30px;
+    gap: 24px;
+    flex-wrap: wrap;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+  }
+  .callout-content h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    color: var(--color-text-primary);
+  }
+  .callout-content p {
+    font-size: 0.92rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  .btn-goto-guides {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-radius: var(--radius-btn);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn-goto-guides:hover {
+    background: #1B4FD8;
+  }
+</style>

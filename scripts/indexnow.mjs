@@ -7,7 +7,18 @@ const keyLocation = `https://${host}/${key}.txt`;
 // Only real, indexable URLs (no anchor tags)
 const urlList = [
   `https://${host}/`,
-  `https://${host}/airport-alerts/`
+  `https://${host}/airports/`,
+  `https://${host}/brands/`,
+  `https://${host}/guides/`,
+  `https://${host}/articles/`,
+  `https://${host}/articles/airport-brand-guide/`,
+  `https://${host}/articles/airport-plan-guide/`,
+  `https://${host}/articles/airport-node-regions/`,
+  `https://${host}/guides/airport-brand-guide/`,
+  `https://${host}/guides/plan-selection/`,
+  `https://${host}/guides/node-selection/`,
+  `https://${host}/risk-alerts/`,
+  `https://${host}/about/`
 ];
 
 const isDryRun = process.argv.includes('--dry-run');

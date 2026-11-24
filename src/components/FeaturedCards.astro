@@ -6,8 +6,8 @@ const cards = [
     tagColor: 'blue',
     title: '主流机场品牌盘点：特色、定位与适用人群',
     desc: '梳理当前主流机场的品牌特点、线路风格与适用场景，帮助你快速找到合适的服务。',
-    date: '2026-11-23',
-    link: '#lingdongyun',
+    date: '2026-11-24',
+    link: '/articles/airport-brand-guide/',
     image: '/images/card-airplane.webp',
     gradient: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
     icon: 'airplane'
@@ -17,8 +17,8 @@ const cards = [
     tagColor: 'blue',
     title: '机场套餐如何选择？价格、流量与性价比全解析',
     desc: '从套餐结构、流量策略、价格区间到适用场景，全面解析如何选择高性价比的机场套餐。',
-    date: '2026-11-23',
-    link: '#muguang',
+    date: '2026-11-24',
+    link: '/articles/airport-plan-guide/',
     image: '/images/card-terminal.webp',
     gradient: 'linear-gradient(135deg, #0F766E 0%, #14B8A6 100%)',
     icon: 'package'
@@ -28,8 +28,8 @@ const cards = [
     tagColor: 'blue',
     title: '机场节点地区详解：常见地区、延迟表现与使用建议',
     desc: '系统介绍常见的节点地区分布、网络特点与使用建议，帮助你根据需求选择合适的线路。',
-    date: '2026-11-23',
-    link: '#weifeng',
+    date: '2026-11-24',
+    link: '/articles/airport-node-regions/',
     image: '/images/card-globe.webp',
     gradient: 'linear-gradient(135deg, #312E81 0%, #6366F1 100%)',
     icon: 'globe'
@@ -45,7 +45,7 @@ const cards = [
         <h2 class="section-main-title">精选导航</h2>
         <span class="section-sub-desc">来自机场日志的深度内容：品牌解析、套餐对比、节点地区与实用技巧。</span>
       </div>
-      <a href="#airports" class="section-more-link">
+      <a href="/airports/" class="section-more-link">
         查看全部档案 <span>→</span>
       </a>
     </div>
@@ -114,6 +114,12 @@ const cards = [
     text-decoration: none;
     color: inherit;
     height: 100%;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .featured-card:hover {
+    transform: translateY(-3px);
   }
 
   .card-thumb {
@@ -129,11 +135,11 @@ const cards = [
     object-fit: cover;
     object-position: center;
     display: block;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .featured-card:hover .thumb-photo-img {
-    transform: scale(1.05);
+    transform: scale(1.04);
   }
 
   .thumb-fallback-gradient {
@@ -158,6 +164,11 @@ const cards = [
     color: var(--color-title);
     line-height: 1.45;
     margin-bottom: 10px;
+    transition: color 0.25s ease;
+  }
+
+  .featured-card:hover .card-title {
+    color: var(--color-primary);
   }
 
   .card-desc {
@@ -188,7 +199,7 @@ const cards = [
     font-size: 1rem;
     color: var(--color-primary);
     font-weight: 700;
-    transition: transform 0.2s ease;
+    transition: transform 0.25s ease;
   }
 
   .featured-card:hover .card-arrow-icon {

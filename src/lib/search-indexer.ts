@@ -208,9 +208,9 @@ export function buildSearchIndex(): SearchItem[] {
       title: '主流机场品牌盘点：特色、定位与适用人群深度解析',
       subtitle: '机场档案精选深度专题',
       snippet: '全面梳理当前主流机场服务商的线路风格、核心特色与目标受众，从重度生产力办公、流媒体观看、游戏联机到日常备用全景对比。',
-      tags: ['专题文章', '机场推荐', '品牌盘点', '主流机场', '特色定位', '适用人群', '灵动云', '暮光加速', '微风网络'],
-      url: '/airports/',
-      searchContent: '主流机场品牌盘点 特色 定位 适用人群 机场推荐 机场评测 灵动云 暮光加速 微风网络 专题文章'
+      tags: ['专题文章', '机场推荐', '品牌盘点', '主流机场', '特色定位', '适用人群', '灵动云', '暮光加速', '微风网络', '大佬云'],
+      url: '/articles/airport-brand-guide/',
+      searchContent: '主流机场品牌盘点 特色 定位 适用人群 机场推荐 机场评测 灵动云 暮光加速 微风网络 大佬云 专题文章'
     },
     {
       id: 'article-plans-selection-cost',
@@ -218,7 +218,7 @@ export function buildSearchIndex(): SearchItem[] {
       subtitle: '套餐信息与选购专题',
       snippet: '从轻量年付、常规月付、大容量带宽到不限时一次性流量包，全面解析如何根据自身实际月消耗量选择最具性价比的套餐方案。',
       tags: ['专题文章', '套餐对比', '便宜机场', '性价比', '流量', '价格', '月付', '年付', '不限时流量包'],
-      url: '/guides/plan-selection/',
+      url: '/articles/airport-plan-guide/',
       searchContent: '机场套餐如何选择 价格 流量 性价比全解析 便宜机场 平价套餐 月付 年付 不限时流量包 选购技巧 专题文章'
     },
     {
@@ -227,7 +227,7 @@ export function buildSearchIndex(): SearchItem[] {
       subtitle: '节点地区与全球骨干专题',
       snippet: '系统介绍中国香港、中国台湾、日本、新加坡、美国、欧洲等核心落地地区的网络延迟表现、带宽承载能力与应用场景选线建议。',
       tags: ['专题文章', '节点地区', '延迟表现', '香港', '日本', '新加坡', '美国', '台湾', '德国', '英国', '选线建议'],
-      url: '/guides/node-selection/',
+      url: '/articles/airport-node-regions/',
       searchContent: '机场节点地区详解 常见地区 延迟表现 使用建议 香港 台湾 日本 新加坡 美国 韩国 欧洲 低延迟 骨干网 专题文章'
     }
   ];
