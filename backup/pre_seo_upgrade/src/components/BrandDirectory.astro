@@ -1,0 +1,271 @@
+---
+import { BRAND_ORDER } from '../lib/brand-config';
+import type { BrandMeta } from '../lib/types';
+
+interface Props {
+  brands: BrandMeta[];
+}
+
+const { brands } = Astro.props;
+
+// Create unified list of items preserving slot order 1 to 18
+const directoryItems = BRAND_ORDER.map(config => {
+  const brandData = brands.find(b => b.id === config.id);
+  return {
+    order: config.order,
+    id: config.id,
+    name: config.name,
+    tagline: config.tagline,
+    badge: config.badge,
+    missing: config.missing || !brandData,
+    brandData
+  };
+});
+---
+
+<section class="directory-section" id="directory">
+  <div class="container">
+    <div class="directory-card">
+      <div class="directory-header">
+        <div class="directory-title-wrap">
+          <div class="directory-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+          </div>
+          <div>
+            <h2 class="directory-main-title">机场品牌快速索引目录</h2>
+            <p class="directory-subtitle">全站收录 17 家经多方资料比对的机场品牌，点击快速直达完整档案与资费明细</p>
+          </div>
+        </div>
+
+        <div class="directory-search-box">
+          <input
+            type="text"
+            id="directoryFilterInput"
+            placeholder="过滤目录品牌..."
+            class="directory-filter-input"
+            aria-label="在目录中快速查找品牌"
+          />
+        </div>
+      </div>
+
+      <div class="directory-grid" id="directoryPillsGrid">
+        {directoryItems.map(item => (
+          item.missing ? (
+            <div class="directory-pill-item disabled" title="大佬云资料整理中，保留固定第4展示位">
+              <span class="pill-order-num">{String(item.order).padStart(2, '0')}</span>
+              <span class="pill-brand-title">{item.name}</span>
+              <span class="pill-status-tag pending">待收录</span>
+            </div>
+          ) : (
+            <a href={`#${item.id}`} class="directory-pill-item" data-filter-name={item.name.toLowerCase()}>
+              <span class="pill-order-num">{String(item.order).padStart(2, '0')}</span>
+              <span class="pill-brand-title">{item.name}</span>
+              {item.badge && <span class="pill-status-tag">{item.badge}</span>}
+              <span class="pill-arrow-indicator" aria-hidden="true">↓</span>
+            </a>
+          )
+        ))}
+      </div>
+
+      <div class="directory-footer-note">
+        <span>💡 提示：本站全部 17 份机场档案已在下方连续展开，每份包含 8 大核心章节与专属 FAQ，手机端与桌面端均可顺畅阅读。</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .directory-section {
+    padding: 24px 0 36px 0;
+  }
+
+  .directory-card {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    border-radius: var(--radius-xl);
+    padding: 30px;
+    box-shadow: 0 4px 24px -2px rgba(19, 35, 68, 0.05), 0 2px 8px -1px rgba(19, 35, 68, 0.03);
+  }
+
+  @media (max-width: 640px) {
+    .directory-card {
+      padding: 20px 16px;
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .directory-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--color-border-light);
+    padding-bottom: 20px;
+  }
+
+  .directory-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .directory-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .directory-main-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-title);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .directory-subtitle {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+
+  .directory-filter-input {
+    background: #F8FAFC;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 8px 16px;
+    font-size: 0.88rem;
+    color: var(--color-title);
+    outline: none;
+    transition: var(--transition-base);
+    min-width: 220px;
+  }
+
+  .directory-filter-input:focus {
+    background: #FFFFFF;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(40, 92, 240, 0.15);
+  }
+
+  /* Grid of Pills */
+  .directory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 12px;
+  }
+
+  .directory-pill-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: #F8FAFC;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition-base);
+  }
+
+  .directory-pill-item:hover {
+    background: #FFFFFF;
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 92, 240, 0.12);
+  }
+
+  .directory-pill-item.disabled {
+    opacity: 0.65;
+    background: #F1F5F9;
+    border-style: dashed;
+    cursor: not-allowed;
+  }
+
+  .directory-pill-item.disabled:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--color-border);
+  }
+
+  .pill-order-num {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    background: var(--color-title);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+  }
+
+  .pill-brand-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-title);
+    margin-left: 8px;
+    margin-right: auto;
+  }
+
+  .pill-status-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+  }
+
+  .pill-status-tag.pending {
+    background: #E2E8F0;
+    color: #64748B;
+  }
+
+  .pill-arrow-indicator {
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    margin-left: 6px;
+  }
+
+  .directory-footer-note {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border-light);
+    font-size: 0.84rem;
+    color: var(--color-muted);
+  }
+</style>
+
+<script>
+  // Filter pills in directory
+  const filterInput = document.getElementById('directoryFilterInput') as HTMLInputElement | null;
+  const pills = document.querySelectorAll<HTMLElement>('.directory-pill-item[data-filter-name]');
+
+  if (filterInput) {
+    filterInput.addEventListener('input', () => {
+      const q = filterInput.value.trim().toLowerCase();
+      pills.forEach(pill => {
+        const name = pill.dataset.filterName || '';
+        if (name.includes(q)) {
+          pill.style.display = 'flex';
+        } else {
+          pill.style.display = 'none';
+        }
+      });
+    });
+  }
+</script>

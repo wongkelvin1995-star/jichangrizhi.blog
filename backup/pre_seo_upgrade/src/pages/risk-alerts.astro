@@ -1,0 +1,480 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getRiskWatchlist } from '../lib/brand-parser.ts';
+
+const riskCases = getRiskWatchlist();
+
+const pageTitle = "机场风险预警与停运记录 - 2027 机场日志";
+const pageDescription = "汇集历史社区停运报告与近期网络服务异常观察。信息均基于公开开源社区线索与用户反馈交叉核对，持续跟进核实，仅供参考，不作为绝对事实定性。";
+
+const riskFaq = [
+  {
+    q: "本专区的风险资讯来源是什么？如何保障客观性？",
+    a: "所有记录均直接引自公开的第三方开源技术社区（如 GitHub limbopro/Paolujichang 追踪仓库）及多位用户的公开反馈。本站对每一条信息均标注原始来源链接、首次报告日期与最近核验日期，严格区分【已基本确认的历史失联报告】与【暂未定论的异常观察中】，绝不凭个别差评或短期故障主观断言。"
+  },
+  {
+    q: "什么情况下一个品牌会被标注为“服务异常观察中”？",
+    a: "当某个机场在较短时间内（如数日内）被多名用户报告出现大面积节点超时、官网打不开、工单无人回复等症状，但在社区尚未形成失联共识、且运营方可能正在处理上游突发网络检修时，本站会标注为“服务异常观察中”，提示用户暂时观望，不草率定性。"
+  },
+  {
+    q: "如果被收录的服务商已恢复正常，该如何申请更新或撤销？",
+    a: "我们设立了专门的品牌澄清与纠错通道。服务商运营团队或用户只需提供可复现的节点可用性证明、官方群组公告截图或最新工单答复，发送邮件至 feedback@jichangrizhi.blog，技术团队将在 24 小时内核对并更新状态标签（如更新为“已恢复”）。"
+  },
+  {
+    q: "面对机场异常或跑路风险，普通用户应该如何防范损失？",
+    a: "首要原则是【坚持按月付费】，尽量避免跨年大额充值；其次建立【备用冗余机制】，常备一家按量计费的一次性流量包作为应急备用；最后在遇到节点不可用时，先保留账户余额截图及订单号，以便后续维权或向支付渠道申请调解。"
+  }
+];
+
+const riskSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: 'https://jichangrizhi.blog/risk-alerts/'
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/risk-alerts/"
+  jsonLdSchema={[riskSchema]}
+>
+  <div class="alerts-page-wrapper">
+    <!-- Subpage Header Banner -->
+    <section class="alerts-hero-banner">
+      <div class="container">
+        <div class="alerts-badge-wrap">
+          <span class="alerts-status-pill">
+            <span class="alert-pulse-dot"></span>
+            公开社区报告 · 持续核实观察
+          </span>
+        </div>
+        <h1 class="alerts-main-title">机场风险预警与停运记录</h1>
+        <p class="alerts-intro-text">
+          网络代理服务具有一定的波动性与生命周期风险。本专区汇总了具有公开来源的社区停运反馈与近期异常动态，旨在帮助用户及时避坑防范资金损失。
+        </p>
+
+        <div class="alerts-disclaimer-box">
+          <div class="disclaimer-icon">ℹ</div>
+          <div class="disclaimer-content">
+            <strong>免责与客观性声明：</strong>
+            本专区收录的资讯仅依据所列第三方公开来源整理，<strong>不代表本站对任何品牌的官方司法定性或恶意抹黑</strong>。部分上游机房故障亦可能导致短期失联；如需提交最新恢复证明或异议申诉，请直达页面底部澄清通道。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 Verified Risk Cards Grid -->
+    <section class="alerts-cards-section">
+      <div class="container">
+        <div class="section-heading-bar">
+          <div class="section-heading-left">
+            <span class="heading-accent-bar" style="background: #EF4444;"></span>
+            <h2 class="section-main-title">重点风险案例档案（共 {riskCases.length} 起）</h2>
+            <span class="section-sub-desc">已核查公开 GitHub Issue 记录与社区跟踪标签</span>
+          </div>
+        </div>
+
+        <div class="risk-cards-grid">
+          {riskCases.map(item => (
+            <div class="journal-card risk-item-card" id={item.id}>
+              <div class="risk-card-top">
+                <div class="risk-brand-info">
+                  <h3 class="risk-brand-name">{item.name}</h3>
+                  <span class="risk-report-time">首次报告：{item.reportDate}</span>
+                </div>
+                <div class="risk-category-badge-wrap">
+                  {item.categoryBadge === 'history-shutdown' ? (
+                    <span class="badge-tag danger">{item.category}</span>
+                  ) : (
+                    <span class="badge-tag warning">{item.category}</span>
+                  )}
+                </div>
+              </div>
+
+              <div class="risk-card-content">
+                <div class="risk-field">
+                  <span class="risk-label">已报告症状：</span>
+                  <p class="risk-text">{item.symptoms}</p>
+                </div>
+
+                <div class="risk-field">
+                  <span class="risk-label">原始公开来源：</span>
+                  <a
+                    href={item.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="content-link break-all source-link"
+                  >
+                    <span>{item.sourceName}</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  </a>
+                </div>
+
+                <div class="risk-field">
+                  <span class="risk-label">防范建议：</span>
+                  <p class="risk-text text-muted">{item.notes}</p>
+                </div>
+              </div>
+
+              <div class="risk-card-footer">
+                <span class="risk-verify-date">
+                  最近核查日期：<strong>{item.lastVerifiedDate}</strong>
+                </span>
+                <span class="risk-status-pill">{item.status}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Risk FAQ -->
+    <section class="alerts-faq-section">
+      <div class="container">
+        <div class="section-heading-bar">
+          <div class="section-heading-left">
+            <span class="heading-accent-bar"></span>
+            <h2 class="section-main-title">风险预警与资金防范常见问答</h2>
+            <span class="section-sub-desc">客观说明核实流程与申诉原则</span>
+          </div>
+        </div>
+
+        <div class="alerts-faq-grid">
+          {riskFaq.map(faq => (
+            <div class="journal-card faq-static-card">
+              <h3 class="faq-static-q">
+                <span class="q-marker">Q:</span> {faq.q}
+              </h3>
+              <p class="faq-static-a">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Clarification & Dispute Channel -->
+    <section class="alerts-dispute-section" id="dispute-channel">
+      <div class="container">
+        <div class="journal-card dispute-card">
+          <div class="dispute-header">
+            <div class="dispute-icon">⚖</div>
+            <div>
+              <h2 class="dispute-title">品牌方申诉与恢复核验通道</h2>
+              <p class="dispute-sub">我们承诺以事实为准绳，任何恢复运营或属于误报的案例均可申请复查</p>
+            </div>
+          </div>
+
+          <div class="dispute-body">
+            <p>
+              机场作为高动态网络服务，偶发性机房上游网络割接、域名 DNS 污染或支付网关维护可能导致短期服务受阻。若您的品牌已被收录但目前<strong>已恢复正常服务</strong>，请按以下流程提交复核：
+            </p>
+            <ol class="dispute-steps">
+              <li>
+                <strong>准备凭据：</strong> 提供官网正常访问截图、最新节点批量连通性测试报告或客户工单系统最新公告。
+              </li>
+              <li>
+                <strong>发送申请：</strong> 邮件标题标注 <code>【风险复核申诉】品牌名称 + 现行状态说明</code>，发送至官方邮箱 <code>feedback@jichangrizhi.blog</code>。
+              </li>
+              <li>
+                <strong>处理时效：</strong> 本站技术团队将在 24 小时内进行双节点网络测通复验，核实无误后即刻修正分类标签或撤销异常提醒。
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .alerts-page-wrapper {
+    padding-bottom: 56px;
+  }
+
+  .alerts-hero-banner {
+    background: linear-gradient(180deg, #FFF1F2 0%, #F7FAFF 100%);
+    border-bottom: 1px solid var(--color-border);
+    padding: 56px 0 44px 0;
+  }
+
+  .alerts-badge-wrap {
+    margin-bottom: 16px;
+  }
+
+  .alerts-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    background: #FFFFFF;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius-full);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #DC2626;
+  }
+
+  .alert-pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: #EF4444;
+    border-radius: 50%;
+  }
+
+  .alerts-main-title {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--color-title);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  @media (max-width: 640px) {
+    .alerts-main-title {
+      font-size: 1.75rem;
+    }
+  }
+
+  .alerts-intro-text {
+    font-size: 1.05rem;
+    color: var(--color-muted);
+    max-width: 820px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .alerts-disclaimer-box {
+    background: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid #FECACA;
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    max-width: 880px;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.05);
+  }
+
+  .disclaimer-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #FEE2E2;
+    color: #DC2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .disclaimer-content {
+    font-size: 0.9rem;
+    color: #7F1D1D;
+    line-height: 1.6;
+  }
+
+  /* Cards Grid */
+  .alerts-cards-section {
+    padding: 48px 0;
+  }
+
+  .risk-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .risk-cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .risk-item-card {
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .risk-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+  }
+
+  .risk-brand-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--color-title);
+  }
+
+  .risk-report-time {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .risk-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex-grow: 1;
+    margin-bottom: 20px;
+  }
+
+  .risk-field {
+    font-size: 0.92rem;
+  }
+
+  .risk-label {
+    font-weight: 700;
+    color: var(--color-title);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.88rem;
+  }
+
+  .risk-text {
+    color: var(--color-body);
+    line-height: 1.6;
+  }
+
+  .risk-text.text-muted {
+    color: var(--color-muted);
+    font-size: 0.88rem;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+  }
+
+  .risk-card-footer {
+    border-top: 1px solid var(--color-border-light);
+    padding-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--color-muted);
+  }
+
+  .risk-status-pill {
+    background: #F1F5F9;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    color: #475569;
+  }
+
+  /* FAQ */
+  .alerts-faq-section {
+    padding: 32px 0;
+  }
+
+  .alerts-faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .alerts-faq-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .faq-static-card {
+    padding: 24px;
+  }
+
+  .faq-static-q {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--color-title);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .q-marker {
+    color: var(--color-primary);
+  }
+
+  .faq-static-a {
+    font-size: 0.92rem;
+    color: var(--color-body);
+    line-height: 1.65;
+  }
+
+  /* Dispute Section */
+  .alerts-dispute-section {
+    padding: 32px 0 16px 0;
+  }
+
+  .dispute-card {
+    padding: 32px;
+  }
+
+  .dispute-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+  }
+
+  .dispute-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .dispute-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-title);
+  }
+
+  .dispute-sub {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+
+  .dispute-body p {
+    font-size: 0.94rem;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .dispute-steps {
+    padding-left: 20px;
+    font-size: 0.92rem;
+    color: var(--color-body);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dispute-steps strong {
+    color: var(--color-title);
+  }
+</style>

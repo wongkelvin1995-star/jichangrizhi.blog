@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// 301 alias / redirection to canonical /airports/ page
+const pageTitle = "机场档案大全 - 正在跳转到机场档案数据库 | 2027 机场日志";
+const pageDescription = "2027 机场日志机场档案专区已升级为独立数据库页面，正在为您自动跳转到 /airports/。";
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/airports/"
+  noindex={true}
+>
+  <head slot="head">
+    <meta http-equiv="refresh" content="0;url=/airports/" />
+  </head>
+
+  <div class="redirect-container container">
+    <div class="journal-card redirect-card">
+      <div class="redirect-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+      <h1 class="redirect-title">正在跳转至机场档案数据库...</h1>
+      <p class="redirect-desc">
+        为提供更清晰的资料检索体验，原档案页面已合并升级至统一的 <strong>/airports/</strong> 独立档案库。
+      </p>
+      <div class="redirect-action">
+        <a href="/airports/" class="btn-redirect-now">立即访问 2027 机场档案大全 →</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .redirect-container {
+    padding: 80px 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .redirect-card {
+    max-width: 540px;
+    width: 100%;
+    text-align: center;
+    padding: 48px 32px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-md);
+  }
+  .redirect-icon {
+    width: 56px;
+    height: 56px;
+    background: #EBF3FF;
+    color: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+  }
+  .redirect-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 12px;
+  }
+  .redirect-desc {
+    font-size: 14.5px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .btn-redirect-now {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--color-primary);
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-btn);
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .btn-redirect-now:hover {
+    background: #1B4FD8;
+  }
+</style>

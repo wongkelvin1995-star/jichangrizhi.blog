@@ -1,0 +1,398 @@
+---
+import PersonalCenterLayout from '../../layouts/PersonalCenterLayout.astro';
+---
+
+<PersonalCenterLayout
+  title="更新通知 · 个人中心 MAX - 机场日志"
+  description="实时接收 2027 机场日志的品牌收录变动、套餐资费调整、客户端教程发布与安全风险通告。"
+  activeTab="notifications"
+  pageHeading="更新通知"
+>
+  <div class="personal-subpage-wrap">
+    <!-- Subpage Action Bar -->
+    <header class="subpage-header-card journal-card">
+      <div class="subpage-header-left">
+        <div class="title-with-count">
+          <h1 class="subpage-main-h1">系统动态与资讯通报</h1>
+          <span class="count-tag" id="notifUnreadCountTag">0 未读</span>
+        </div>
+        <p class="subpage-desc">
+          真实记录机场品牌入驻、套餐资费变动、实战教程更新与突发安全风险预警。
+        </p>
+      </div>
+
+      <div class="subpage-header-controls">
+        <button type="button" id="btnMarkAllRead" class="btn-mark-all-read">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>全部标为已读</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Filter Buttons Bar -->
+    <div class="notif-filter-strip journal-card">
+      <span class="filter-label">筛选类型：</span>
+      <div class="filter-btn-group" id="notifFilterGroup">
+        <button type="button" class="filter-pill active" data-type="all">全部动态</button>
+        <button type="button" class="filter-pill" data-type="brand">品牌新增</button>
+        <button type="button" class="filter-pill" data-type="price">资费变动</button>
+        <button type="button" class="filter-pill" data-type="guide">指南教程</button>
+        <button type="button" class="filter-pill" data-type="risk">安全预警</button>
+      </div>
+    </div>
+
+    <!-- Notifications List -->
+    <main class="notifications-list-wrap" id="notificationsList">
+      <!-- Rendered dynamically via JS -->
+    </main>
+  </div>
+</PersonalCenterLayout>
+
+<script>
+  import { UserStore, type UserNotification } from '../../lib/user-store.ts';
+
+  const listContainer = document.getElementById('notificationsList');
+  const countTag = document.getElementById('notifUnreadCountTag');
+  const markAllBtn = document.getElementById('btnMarkAllRead');
+  const filterBtns = document.querySelectorAll('#notifFilterGroup .filter-pill') as NodeListOf<HTMLButtonElement>;
+
+  let activeType = 'all';
+
+  const TYPE_NAMES: Record<string, { label: string; class: string }> = {
+    brand: { label: '品牌新增', class: 'brand' },
+    price: { label: '资费变动', class: 'price' },
+    guide: { label: '指南教程', class: 'guide' },
+    risk: { label: '安全预警', class: 'risk' }
+  };
+
+  function renderNotifications() {
+    const list = UserStore.getNotifications();
+    const unreadCount = list.filter(n => !n.read).length;
+
+    if (countTag) {
+      countTag.textContent = `${unreadCount} 未读`;
+      if (unreadCount === 0) {
+        countTag.style.background = '#F1F5F9';
+        countTag.style.color = '#64748B';
+      } else {
+        countTag.style.background = '#FEE2E2';
+        countTag.style.color = '#EF4444';
+      }
+    }
+
+    const filtered = list.filter(item => {
+      if (activeType === 'all') return true;
+      return item.type === activeType;
+    });
+
+    if (listContainer) {
+      if (filtered.length === 0) {
+        listContainer.innerHTML = `
+          <div class="journal-card" style="padding: 40px; text-align: center; color: #647B95;">
+            当前分类下暂无通知通报。
+          </div>
+        `;
+        return;
+      }
+
+      listContainer.innerHTML = filtered.map(item => {
+        const typeInfo = TYPE_NAMES[item.type] || { label: '通知', class: 'brand' };
+        return `
+          <article class="journal-card notif-card ${item.read ? 'read' : 'unread'}" data-id="${item.id}">
+            <div class="notif-header-row">
+              <div class="notif-type-and-title">
+                <span class="type-pill ${typeInfo.class}">${typeInfo.label}</span>
+                ${!item.read ? '<span class="unread-dot-badge">未读</span>' : ''}
+                <h3 class="notif-card-title">${item.title}</h3>
+              </div>
+              <span class="notif-date-tag">${item.date}</span>
+            </div>
+
+            <p class="notif-content-text">${item.content}</p>
+
+            <div class="notif-card-footer">
+              ${item.relatedBrandId ? `<a href="/airports/${item.relatedBrandId}/" class="notif-link-btn">查看对应品牌档案 →</a>` : ''}
+              ${item.type === 'guide' ? `<a href="/guides/" class="notif-link-btn">前往指南知识中心 →</a>` : ''}
+              ${item.type === 'risk' ? `<a href="/risk-alerts/" class="notif-link-btn">查看风险预警专区 →</a>` : ''}
+              <button type="button" class="btn-toggle-read" data-id="${item.id}">
+                ${item.read ? '标为未读' : '标为已读'}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // Bind read toggles
+      listContainer.querySelectorAll('.btn-toggle-read').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = (btn as HTMLElement).dataset.id!;
+          const currentList = UserStore.getNotifications();
+          const target = currentList.find(n => n.id === id);
+          if (target) {
+            if (target.read) {
+              // mark unread
+              const updated = currentList.map(n => n.id === id ? { ...n, read: false } : n);
+              localStorage.setItem('airport_journal_notifications', JSON.stringify(updated));
+              window.dispatchEvent(new CustomEvent('aj-user-store-updated', { detail: { key: 'notifications' } }));
+            } else {
+              UserStore.markNotificationRead(id);
+            }
+            renderNotifications();
+          }
+        });
+      });
+    }
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeType = btn.dataset.type || 'all';
+      renderNotifications();
+    });
+  });
+
+  if (markAllBtn) {
+    markAllBtn.addEventListener('click', () => {
+      UserStore.markAllNotificationsRead();
+      renderNotifications();
+    });
+  }
+
+  renderNotifications();
+  window.addEventListener('aj-user-store-updated', () => {
+    renderNotifications();
+  });
+</script>
+
+<style>
+  .personal-subpage-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Subpage Header Card */
+  .subpage-header-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+    flex-wrap: wrap;
+  }
+  .subpage-header-left {
+    max-width: 500px;
+  }
+  .title-with-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .subpage-main-h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0;
+  }
+  .count-tag {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+  }
+  .subpage-desc {
+    font-size: 13.5px;
+    color: #647B95;
+    margin: 0;
+  }
+
+  .btn-mark-all-read {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: #F0F5FB;
+    border: 1px solid #DFE7F1;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #142B48;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-mark-all-read:hover {
+    background: #2454ED;
+    border-color: #2454ED;
+    color: #FFFFFF;
+  }
+
+  /* Filter Strip */
+  .notif-filter-strip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 12px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #647B95;
+  }
+  .filter-btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .filter-pill {
+    padding: 6px 12px;
+    background: #F0F5FB;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #647B95;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-pill:hover {
+    background: #E2EBF5;
+    color: #142B48;
+  }
+  .filter-pill.active {
+    background: #2454ED;
+    color: #FFFFFF;
+  }
+
+  /* Notifications List */
+  .notifications-list-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .notif-card {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+    transition: all 0.2s ease;
+  }
+  .notif-card.unread {
+    border-left: 4px solid #2454ED;
+    background: #FCFDFF;
+  }
+  .notif-card.read {
+    opacity: 0.88;
+  }
+  .notif-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .notif-type-and-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .unread-dot-badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: #FFFFFF;
+    background: #EF4444;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .notif-card-title {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: #142B48;
+    margin: 0;
+  }
+  .notif-date-tag {
+    font-size: 12px;
+    color: #94A3B8;
+  }
+  .notif-content-text {
+    font-size: 13.5px;
+    color: #647B95;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .notif-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #F0F5FB;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .notif-link-btn {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2454ED;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .notif-link-btn:hover {
+    color: #173B9C;
+    text-decoration: underline;
+  }
+  .btn-toggle-read {
+    background: transparent;
+    border: none;
+    font-size: 12px;
+    color: #94A3B8;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    margin-left: auto;
+  }
+  .btn-toggle-read:hover {
+    color: #142B48;
+  }
+
+  .type-pill {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .type-pill.brand {
+    background: #E8F0FE;
+    color: #2454ED;
+  }
+  .type-pill.price {
+    background: #FEF3C7;
+    color: #B45309;
+  }
+  .type-pill.guide {
+    background: #DCFCE7;
+    color: #166534;
+  }
+  .type-pill.risk {
+    background: #FEE2E2;
+    color: #991B1B;
+  }
+</style>

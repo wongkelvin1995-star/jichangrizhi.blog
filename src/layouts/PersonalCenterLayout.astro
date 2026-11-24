@@ -1,0 +1,544 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  activeTab?: 'overview' | 'favorites' | 'bookmarks' | 'history' | 'compare' | 'notifications' | 'settings' | 'feedback';
+  pageHeading?: string;
+}
+
+const {
+  title = '个人中心 MAX · 机场日志个人空间旗舰',
+  description = '2027 机场日志个人中心，提供机场品牌收藏、指南教程书签、浏览历史、多品牌套餐横向对比及个性化偏好设置，基于浏览器本地存储保障纯净隐私。',
+  activeTab = 'overview',
+  pageHeading = '个人概览'
+} = Astro.props;
+
+const navItems = [
+  { id: 'overview', label: '个人概览', href: '/personal-center/', icon: 'user' },
+  { id: 'favorites', label: '机场收藏', href: '/personal-center/favorites/', icon: 'heart' },
+  { id: 'bookmarks', label: '文章收藏', href: '/personal-center/bookmarks/', icon: 'bookmark' },
+  { id: 'history', label: '浏览记录', href: '/personal-center/history/', icon: 'clock' },
+  { id: 'compare', label: '套餐对比', href: '/personal-center/compare/', icon: 'compare' },
+  { id: 'notifications', label: '更新通知', href: '/personal-center/notifications/', icon: 'bell', hasBadge: true },
+  { id: 'settings', label: '偏好设置', href: '/personal-center/settings/', icon: 'settings' },
+  { id: 'feedback', label: '意见反馈', href: '/personal-center/feedback/', icon: 'message' }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/personal-center/"
+  robots="noindex, follow"
+>
+  <div class="personal-center-page">
+    <!-- Breadcrumbs -->
+    <nav class="page-breadcrumbs container" aria-label="面包屑导航">
+      <ol class="breadcrumb-list">
+        <li><a href="/">首页</a></li>
+        <li class="separator">/</li>
+        <li><a href="/personal-center/">个人中心</a></li>
+        {activeTab !== 'overview' && (
+          <>
+            <li class="separator">/</li>
+            <li aria-current="page">{pageHeading}</li>
+          </>
+        )}
+      </ol>
+    </nav>
+
+    <div class="container personal-main-container">
+      <!-- Top Welcome Banner Card -->
+      <section class="personal-welcome-card journal-card">
+        <div class="welcome-left">
+          <div class="user-avatar-disc" id="userAvatarDisc">
+            <!-- Icon rendered via JS based on profile.avatar -->
+            <svg class="avatar-svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
+            </svg>
+          </div>
+          <div class="user-info-meta">
+            <div class="user-name-row">
+              <span class="user-nickname" id="userNicknameText">访客探索者</span>
+              <span class="identity-badge" id="userIdentityText">本地专属访客</span>
+            </div>
+            <p class="user-motto-text">
+              欢迎回到 2027 机场日志 · 数据全量存储于本机浏览器，安全纯粹无追踪
+            </p>
+          </div>
+        </div>
+
+        <!-- 4 Live Stats -->
+        <div class="welcome-stats-row">
+          <a href="/personal-center/favorites/" class="stat-pill-item" title="查看收藏的机场品牌">
+            <span class="stat-num" id="statFavoritesCount">0</span>
+            <span class="stat-label">机场收藏</span>
+          </a>
+          <a href="/personal-center/bookmarks/" class="stat-pill-item" title="查看收藏的文章教程">
+            <span class="stat-num" id="statBookmarksCount">0</span>
+            <span class="stat-label">文章收藏</span>
+          </a>
+          <a href="/personal-center/history/" class="stat-pill-item" title="查看浏览记录">
+            <span class="stat-num" id="statHistoryCount">0</span>
+            <span class="stat-label">浏览足迹</span>
+          </a>
+          <a href="/personal-center/compare/" class="stat-pill-item" title="进入套餐横向对比">
+            <span class="stat-num" id="statCompareCount">0</span>
+            <span class="stat-label">套餐对比</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Main Layout Body: Left Sidebar + Right Content -->
+      <div class="personal-body-grid">
+        <!-- Left Sidebar Navigation -->
+        <aside class="personal-sidebar">
+          <nav class="sidebar-nav-list journal-card" aria-label="个人中心功能导航">
+            {navItems.map(item => (
+              <a
+                href={item.href}
+                class={`sidebar-nav-link ${activeTab === item.id ? 'active' : ''}`}
+              >
+                <div class="nav-link-left">
+                  {item.icon === 'user' && (
+                    <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  )}
+                  {item.icon === 'heart' && (
+                    <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                  )}
+                  {item.icon === 'bookmark' && (
+                    <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  )}
+                  {item.icon === 'clock' && (
+                    <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  )}
+                  {item.icon === 'compare' && (
+                    <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="16 3 21 3 21 8"></polyline>
+                      <line x1="4" y1="20" x2="21" y2="3"></line>
+                      <polyline points="21 16 21 21 16 21"></polyline>
+                      <line x1="15" y1="15" x2="21" y2="21"></line>
+                      <line x1="4" y1="4" x2="9" y2="9"></line>
+                    </svg>
+                  )}
+                  {item.icon === 'bell' && (
+                    <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                  )}
+                  {item.icon === 'settings' && (
+                    <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                  )}
+                  {item.icon === 'message' && (
+                    <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  )}
+                  <span class="nav-text">{item.label}</span>
+                </div>
+                {item.hasBadge && (
+                  <span class="sidebar-unread-badge" id="sidebarNotifBadge" style="display: none;">0</span>
+                )}
+              </a>
+            ))}
+          </nav>
+
+          <!-- Quick Privacy Note -->
+          <div class="sidebar-privacy-box">
+            <div class="privacy-note-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2454ED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <span>隐私安全承诺</span>
+            </div>
+            <p class="privacy-note-text">
+              本站个人中心无需账号密码，所有收藏、足迹与对比数据完全保存在当前设备浏览器中。
+            </p>
+          </div>
+        </aside>
+
+        <!-- Right Content Area -->
+        <main class="personal-content-area">
+          <slot />
+        </main>
+      </div>
+
+      <!-- Local Storage Notice Footer -->
+      <footer class="personal-local-disclaimer">
+        <p>
+          💡 <strong>本地数据说明：</strong>当前个人空间资料保存在本机浏览器 LocalStorage 内，绝不上传任何云端服务器。若清理浏览器缓存或更换无痕窗口，数据可能重置。可在「偏好设置」中一键备份或迁移数据。
+        </p>
+      </footer>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { UserStore } from '../lib/user-store.ts';
+
+  const AVATAR_SVGS: Record<string, string> = {
+    plane: '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path></svg>',
+    compass: '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>',
+    rocket: '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>',
+    globe: '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>',
+    cloud: '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>',
+    shield: '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>'
+  };
+
+  function syncLayoutState() {
+    const profile = UserStore.getProfile();
+    const counts = UserStore.getCounts();
+
+    // 1. Sync User Avatar & Profile Text
+    const avatarDisc = document.getElementById('userAvatarDisc');
+    if (avatarDisc && AVATAR_SVGS[profile.avatar]) {
+      avatarDisc.innerHTML = AVATAR_SVGS[profile.avatar];
+    }
+    const nicknameEl = document.getElementById('userNicknameText');
+    if (nicknameEl) nicknameEl.textContent = profile.nickname || '访客探索者';
+    const identityEl = document.getElementById('userIdentityText');
+    if (identityEl) identityEl.textContent = profile.identity || '本地专属访客';
+
+    // 2. Sync Quick Counts
+    const favCountEl = document.getElementById('statFavoritesCount');
+    if (favCountEl) favCountEl.textContent = String(counts.favorites);
+
+    const bkmCountEl = document.getElementById('statBookmarksCount');
+    if (bkmCountEl) bkmCountEl.textContent = String(counts.bookmarks);
+
+    const histCountEl = document.getElementById('statHistoryCount');
+    if (histCountEl) histCountEl.textContent = String(counts.history);
+
+    const compCountEl = document.getElementById('statCompareCount');
+    if (compCountEl) compCountEl.textContent = String(counts.comparison);
+
+    // 3. Sync Notification Badge
+    const badgeEl = document.getElementById('sidebarNotifBadge');
+    if (badgeEl) {
+      if (counts.unreadNotifs > 0) {
+        badgeEl.textContent = String(counts.unreadNotifs);
+        badgeEl.style.display = 'inline-flex';
+      } else {
+        badgeEl.style.display = 'none';
+      }
+    }
+  }
+
+  syncLayoutState();
+  window.addEventListener('aj-user-store-updated', () => {
+    syncLayoutState();
+  });
+</script>
+
+<style>
+  .personal-center-page {
+    padding-bottom: 72px;
+    background: #F0F5FB;
+    min-height: 100vh;
+  }
+
+  /* Breadcrumbs */
+  .page-breadcrumbs {
+    padding-top: 20px;
+    padding-bottom: 16px;
+  }
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #647B95;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+  .breadcrumb-list a {
+    color: #647B95;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .breadcrumb-list a:hover {
+    color: #2454ED;
+  }
+  .breadcrumb-list .separator {
+    color: #CBD5E1;
+  }
+
+  /* Top Welcome Card */
+  .personal-welcome-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 32px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F9FF 100%);
+    border: 1px solid #DFE7F1;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(36, 84, 237, 0.05);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .welcome-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 280px;
+  }
+  .user-avatar-disc {
+    width: 68px;
+    height: 68px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #2454ED 0%, #173B9C 100%);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(36, 84, 237, 0.28);
+    flex-shrink: 0;
+  }
+  .user-info-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .user-name-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .user-nickname {
+    font-size: 22px;
+    font-weight: 800;
+    color: #142B48;
+    letter-spacing: -0.01em;
+  }
+  .identity-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2454ED;
+    background: #E8F0FE;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(36, 84, 237, 0.15);
+  }
+  .user-motto-text {
+    font-size: 13.5px;
+    color: #647B95;
+    margin: 0;
+  }
+
+  /* 4 Stats */
+  .welcome-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    min-width: 380px;
+  }
+  .stat-pill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .stat-pill-item:hover {
+    transform: translateY(-2px);
+    border-color: #2454ED;
+    box-shadow: 0 6px 14px rgba(36, 84, 237, 0.1);
+  }
+  .stat-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: #2454ED;
+    line-height: 1.2;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: #647B95;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* Grid: Sidebar + Content */
+  .personal-body-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* Left Sidebar Navigation */
+  .personal-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: sticky;
+    top: 90px;
+  }
+  .sidebar-nav-list {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+  }
+  .sidebar-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    border-radius: 10px;
+    color: #142B48;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.15s ease;
+  }
+  .nav-link-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sidebar-icon {
+    color: #647B95;
+    transition: color 0.15s ease;
+    flex-shrink: 0;
+  }
+  .sidebar-nav-link:hover {
+    background: #F0F5FB;
+    color: #2454ED;
+  }
+  .sidebar-nav-link:hover .sidebar-icon {
+    color: #2454ED;
+  }
+  .sidebar-nav-link.active {
+    background: #2454ED;
+    color: #FFFFFF;
+  }
+  .sidebar-nav-link.active .sidebar-icon {
+    color: #FFFFFF;
+  }
+  .sidebar-unread-badge {
+    background: #EF4444;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 10px;
+    line-height: 1.4;
+  }
+  .sidebar-nav-link.active .sidebar-unread-badge {
+    background: #FFFFFF;
+    color: #2454ED;
+  }
+
+  /* Sidebar Privacy Box */
+  .sidebar-privacy-box {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 12px;
+  }
+  .privacy-note-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: #142B48;
+    margin-bottom: 6px;
+  }
+  .privacy-note-text {
+    color: #647B95;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Right Content Area */
+  .personal-content-area {
+    min-width: 0;
+  }
+
+  /* Local Storage Footer Note */
+  .personal-local-disclaimer {
+    margin-top: 36px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border: 1px dashed #CBD5E1;
+    border-radius: 12px;
+    font-size: 13px;
+    color: #647B95;
+    line-height: 1.6;
+    text-align: center;
+  }
+  .personal-local-disclaimer p {
+    margin: 0;
+  }
+
+  /* Responsive Mobile */
+  @media (max-width: 960px) {
+    .personal-welcome-card {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+    }
+    .welcome-stats-row {
+      width: 100%;
+      min-width: unset;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .personal-body-grid {
+      grid-template-columns: 1fr;
+    }
+    .personal-sidebar {
+      position: static;
+    }
+    .sidebar-nav-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 6px;
+    }
+    .sidebar-nav-link {
+      padding: 9px 10px;
+      font-size: 13px;
+    }
+    .sidebar-privacy-box {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sidebar-nav-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .user-nickname {
+      font-size: 18px;
+    }
+  }
+</style>

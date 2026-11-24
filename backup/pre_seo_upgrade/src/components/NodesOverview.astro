@@ -1,0 +1,153 @@
+---
+// Nodes & Regions Overview Section
+---
+
+<section class="overview-section" id="nodes-overview">
+  <div class="container">
+    <div class="section-heading-bar">
+      <div class="section-heading-left">
+        <span class="heading-accent-bar"></span>
+        <h2 class="section-main-title">节点地区与线路类型解析</h2>
+        <span class="section-sub-desc">常见出口地区分布、网络延迟特点与流媒体适配场景</span>
+      </div>
+      <a href="#airports" class="section-more-link">
+        查看品牌节点覆盖 <span>↓</span>
+      </a>
+    </div>
+
+    <div class="nodes-grid">
+      <div class="journal-card node-region-card">
+        <div class="node-region-header">
+          <span class="region-flag">🇭🇰</span>
+          <div>
+            <h3 class="region-title">中国香港 (Hong Kong)</h3>
+            <span class="region-latency">延迟参考：15ms ~ 45ms（沿海）</span>
+          </div>
+        </div>
+        <p class="region-desc">
+          国内访问延迟最低的黄金地区，极适合高频网页交互、学术检索、日常外贸与常规即时通讯。
+        </p>
+        <div class="region-tags">
+          <span class="badge-tag blue">超低延迟</span>
+          <span class="badge-tag blue">BGP中转/IPLC</span>
+          <span class="badge-tag blue">网页秒开</span>
+        </div>
+      </div>
+
+      <div class="journal-card node-region-card">
+        <div class="node-region-header">
+          <span class="region-flag">🇯🇵</span>
+          <div>
+            <h3 class="region-title">日本 (Tokyo / Osaka)</h3>
+            <span class="region-latency">延迟参考：35ms ~ 75ms</span>
+          </div>
+        </div>
+        <p class="region-desc">
+          网络资源极其丰富，版权限制适中，适合海外流媒体高码率 4K 播放、海外应用商店及 GitHub 代码拉取。
+        </p>
+        <div class="region-tags">
+          <span class="badge-tag blue">流媒体原生</span>
+          <span class="badge-tag blue">大带宽骨干</span>
+          <span class="badge-tag blue">开发者友好</span>
+        </div>
+      </div>
+
+      <div class="journal-card node-region-card">
+        <div class="node-region-header">
+          <span class="region-flag">🇸🇬</span>
+          <div>
+            <h3 class="region-title">新加坡 (Singapore)</h3>
+            <span class="region-latency">延迟参考：45ms ~ 85ms</span>
+          </div>
+        </div>
+        <p class="region-desc">
+          东南亚核心网络枢纽，对 ChatGPT、Claude 等主流 AI 工具兼容性好，IP 策略相对宽松稳定。
+        </p>
+        <div class="region-tags">
+          <span class="badge-tag blue">AI 工具适配</span>
+          <span class="badge-tag blue">国际连通性好</span>
+          <span class="badge-tag blue">稳定冗余</span>
+        </div>
+      </div>
+
+      <div class="journal-card node-region-card">
+        <div class="node-region-header">
+          <span class="region-flag">🇺🇸</span>
+          <div>
+            <h3 class="region-title">美国 (Los Angeles / Silicon Valley)</h3>
+            <span class="region-latency">延迟参考：130ms ~ 190ms</span>
+          </div>
+        </div>
+        <p class="region-desc">
+          几乎所有国际主流服务与原生内容的发源地，海量媒体库资源与全球独占剧集库的必备选择。
+        </p>
+        <div class="region-tags">
+          <span class="badge-tag blue">资源最全面</span>
+          <span class="badge-tag blue">全球独占剧</span>
+          <span class="badge-tag blue">大容量池</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .nodes-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .node-region-card {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .node-region-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .region-flag {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .region-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--color-title);
+  }
+
+  .region-latency {
+    font-size: 0.78rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    display: block;
+  }
+
+  .region-desc {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex-grow: 1;
+  }
+
+  .region-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--color-border-light);
+    padding-top: 12px;
+  }
+</style>

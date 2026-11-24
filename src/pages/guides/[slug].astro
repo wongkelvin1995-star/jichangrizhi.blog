@@ -1,0 +1,748 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GUIDE_ARTICLES, type GuideArticle } from '../../lib/guides-data.ts';
+import { getAllBrands } from '../../lib/brand-parser.ts';
+
+export async function getStaticPaths() {
+  return GUIDE_ARTICLES.map(article => ({
+    params: { slug: article.slug },
+    props: { article }
+  }));
+}
+
+interface Props {
+  article: GuideArticle;
+}
+
+const { article } = Astro.props;
+const allBrands = getAllBrands();
+
+// Match related brands data
+const relatedBrands = article.relatedBrandIds.map(id => {
+  return allBrands.find(b => b.id === id);
+}).filter(Boolean);
+
+// Other guides for recommendations
+const otherGuides = GUIDE_ARTICLES.filter(g => g.slug !== article.slug).slice(0, 3);
+
+const canonicalPath = `/guides/${article.slug}/`;
+
+// Schemas
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: '首页',
+      item: 'https://jichangrizhi.blog/'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: '使用指南',
+      item: 'https://jichangrizhi.blog/guides/'
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: article.title,
+      item: `https://jichangrizhi.blog/guides/${article.slug}/`
+    }
+  ]
+};
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: article.h1,
+  description: article.description,
+  datePublished: `${article.updateDate}T08:00:00+08:00`,
+  dateModified: `${article.updateDate}T08:00:00+08:00`,
+  author: {
+    '@type': 'Organization',
+    name: '2027 机场日志技术编辑部',
+    url: 'https://jichangrizhi.blog/about/'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: '2027 机场日志',
+    url: 'https://jichangrizhi.blog/'
+  }
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: article.faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.a
+    }
+  }))
+};
+---
+
+<BaseLayout
+  title={article.seoTitle}
+  description={article.description}
+  canonicalPath={canonicalPath}
+  jsonLdSchema={[breadcrumbSchema, articleSchema, faqSchema]}
+>
+  <div class="guide-detail-page">
+    <!-- Breadcrumbs -->
+    <nav class="page-breadcrumbs container" aria-label="面包屑导航">
+      <ol class="breadcrumb-list">
+        <li><a href="/">首页</a></li>
+        <li class="separator">/</li>
+        <li><a href="/guides/">使用指南</a></li>
+        <li class="separator">/</li>
+        <li aria-current="page">{article.title}</li>
+      </ol>
+    </nav>
+
+    <!-- Guide Header Banner -->
+    <header class="guide-header-banner">
+      <div class="container">
+        <div class="guide-meta-strip">
+          <span class="badge-tag blue">{article.category}</span>
+          <span class="guide-read-time">阅读时间：约 {article.readTime}</span>
+          <span class="guide-date">最后更新：{article.updateDate}</span>
+          <button
+            type="button"
+            id="guideBookmarkBtn"
+            class="btn-bookmark-action"
+            data-slug={article.slug}
+            data-title={article.title}
+            data-category={article.category}
+            data-description={article.description}
+            data-read-time={article.readTime}
+            data-url={`/guides/${article.slug}/`}
+            title="收藏此使用指南"
+          >
+            <svg class="bookmark-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span id="bookmarkBtnLabel">收藏指南</span>
+          </button>
+        </div>
+
+        <h1 class="guide-main-h1">{article.h1}</h1>
+
+        <div class="guide-summary-callout">
+          <div class="summary-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </div>
+          <p class="summary-text">{article.summary}</p>
+        </div>
+
+        <div class="guide-tags-bar">
+          <span class="tags-label">核心主题：</span>
+          {article.tags.map(tag => (
+            <span class="guide-kw-tag">#{tag}</span>
+          ))}
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Article Body -->
+    <main class="container guide-body-container">
+      <article class="guide-content-wrapper journal-card">
+        {article.sections.map(section => (
+          <section class="guide-section-block">
+            <h2 class="section-block-title">{section.title}</h2>
+            <div class="section-html-content" set:html={section.content} />
+          </section>
+        ))}
+
+        <!-- Guide Specific FAQ -->
+        <section class="guide-faq-block" id="faq">
+          <div class="faq-block-header">
+            <div class="faq-icon-disc">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <h2 class="faq-block-h2">本教程相关常见疑难解答 (FAQ)</h2>
+          </div>
+
+          <div class="guide-faq-list">
+            {article.faqs.map((faq, idx) => (
+              <details class="faq-item" open={idx === 0}>
+                <summary class="faq-question">
+                  <span class="faq-num">Q{idx + 1}.</span>
+                  <span>{faq.q}</span>
+                </summary>
+                <div class="faq-answer">
+                  <p>{faq.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+      </article>
+
+      <!-- Internal Link Block: Related Airport Brands -->
+      {relatedBrands.length > 0 && (
+        <section class="related-brands-card journal-card">
+          <div class="section-heading-bar">
+            <div class="section-heading-left">
+              <span class="heading-accent-bar"></span>
+              <h2 class="section-main-title">适用于本教程的精选机场品牌档案</h2>
+              <span class="section-sub-desc">经实测完美兼容本教程客户端协议与订阅规范的主流服务商</span>
+            </div>
+          </div>
+
+          <div class="related-brands-grid">
+            {relatedBrands.map(b => (
+              <div class="brand-match-pill-card">
+                <div class="brand-match-info">
+                  <span class="match-order">#{String(b?.order).padStart(2, '0')}</span>
+                  <a href={`/airports/${b?.id}/`} class="match-name-link">
+                    {b?.brandName}
+                  </a>
+                  <span class="match-en">({b?.englishName})</span>
+                </div>
+                <div class="match-specs">
+                  <span class="spec-text">{b?.lineTypes?.split(/[、,]/)[0]}</span>
+                  <span class="spec-text">{b?.nodeRegions?.split(/[、,]/)[0]}</span>
+                </div>
+                <div class="match-action">
+                  <a href={`/airports/${b?.id}/`} class="btn-check-brand">
+                    查看档案 →
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Other Related Guides -->
+      <section class="more-guides-section">
+        <h3 class="more-guides-title">探索更多实战指南</h3>
+        <div class="more-guides-grid">
+          {otherGuides.map(g => (
+            <a href={`/guides/${g.slug}/`} class="more-guide-card journal-card">
+              <span class="more-cat">{g.category}</span>
+              <h4 class="more-title">{g.title}</h4>
+              <span class="more-link">阅读此指南 →</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- Back to Guides Hub -->
+      <div class="back-hub-wrap">
+        <a href="/guides/" class="btn-back-hub">
+          ← 返回 2027 机场使用指南大全
+        </a>
+      </div>
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  import { UserStore } from '../../lib/user-store.ts';
+
+  // 1. Record History
+  UserStore.recordHistory({
+    url: window.location.pathname,
+    title: document.querySelector('.guide-main-h1')?.textContent?.trim() || document.title,
+    type: 'guide',
+    typeName: '使用指南'
+  });
+
+  // 2. Bookmark Toggle
+  const bookmarkBtn = document.getElementById('guideBookmarkBtn') as HTMLButtonElement | null;
+  const bookmarkLabel = document.getElementById('bookmarkBtnLabel');
+
+  function syncBookmarkState() {
+    if (!bookmarkBtn) return;
+    const slug = bookmarkBtn.dataset.slug!;
+    const isBookmarked = UserStore.isArticleBookmarked(slug);
+    if (isBookmarked) {
+      bookmarkBtn.classList.add('bookmarked');
+      if (bookmarkLabel) bookmarkLabel.textContent = '已收藏';
+    } else {
+      bookmarkBtn.classList.remove('bookmarked');
+      if (bookmarkLabel) bookmarkLabel.textContent = '收藏指南';
+    }
+  }
+
+  if (bookmarkBtn) {
+    bookmarkBtn.addEventListener('click', () => {
+      UserStore.toggleBookmarkArticle({
+        slug: bookmarkBtn.dataset.slug!,
+        title: bookmarkBtn.dataset.title!,
+        category: bookmarkBtn.dataset.category!,
+        description: bookmarkBtn.dataset.description!,
+        url: bookmarkBtn.dataset.url!,
+        readTime: bookmarkBtn.dataset.readTime!
+      });
+      syncBookmarkState();
+    });
+  }
+
+  syncBookmarkState();
+  window.addEventListener('aj-user-store-updated', () => {
+    syncBookmarkState();
+  });
+</script>
+
+<style>
+  /* Bookmark Action Button */
+  .btn-bookmark-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: #FFFFFF;
+    color: #475569;
+    border: 1px solid #CBD5E1;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.2s ease;
+  }
+  .btn-bookmark-action:hover {
+    background: #F8FAFC;
+    color: #1E293B;
+    border-color: #94A3B8;
+  }
+  .btn-bookmark-action .bookmark-svg {
+    transition: all 0.2s ease;
+  }
+  .btn-bookmark-action.bookmarked {
+    background: #EFF6FF;
+    border-color: #93C5FD;
+    color: #2454ED;
+  }
+  .btn-bookmark-action.bookmarked .bookmark-svg {
+    fill: #2454ED;
+    stroke: #2454ED;
+  }
+  .guide-detail-page {
+    padding-bottom: 72px;
+  }
+
+  /* Breadcrumbs */
+  .page-breadcrumbs {
+    padding-top: 20px;
+    padding-bottom: 12px;
+  }
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+  .breadcrumb-list a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .breadcrumb-list a:hover {
+    color: var(--color-primary);
+  }
+  .breadcrumb-list .separator {
+    color: #BDC5D0;
+  }
+
+  /* Header Banner */
+  .guide-header-banner {
+    padding: 28px 0 24px 0;
+    background: linear-gradient(180deg, rgba(235, 243, 255, 0.4) 0%, rgba(255, 255, 255, 0) 100%);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  }
+  .guide-meta-strip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .guide-read-time, .guide-date {
+    color: var(--color-text-muted);
+  }
+  .guide-main-h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    line-height: 1.35;
+    margin-bottom: 18px;
+    max-width: 960px;
+  }
+
+  .guide-summary-callout {
+    display: flex;
+    gap: 14px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border-left: 4px solid var(--color-primary);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 18px;
+    max-width: 900px;
+  }
+  .summary-icon {
+    color: var(--color-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .summary-text {
+    font-size: 14.5px;
+    color: #334155;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .guide-tags-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+  }
+  .tags-label {
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+  .guide-kw-tag {
+    color: #475569;
+    background: #F1F5F9;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  /* Body Container */
+  .guide-body-container {
+    padding-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .guide-content-wrapper {
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: 36px 44px;
+  }
+
+  .guide-section-block {
+    margin-bottom: 36px;
+  }
+  .section-block-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 16px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+
+  .section-html-content :global(p) {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #334155;
+    margin-bottom: 16px;
+  }
+  .section-html-content :global(ul), .section-html-content :global(ol) {
+    padding-left: 24px;
+    margin-bottom: 20px;
+  }
+  .section-html-content :global(li) {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #334155;
+    margin-bottom: 8px;
+  }
+  .section-html-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .section-html-content :global(th) {
+    background: #F8FAFC;
+    color: #1E293B;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .section-html-content :global(td) {
+    padding: 12px 16px;
+    border-bottom: 1px solid #F1F5F9;
+    color: #334155;
+  }
+  .section-html-content :global(pre) {
+    background: #0F172A;
+    color: #F8FAFC;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13.5px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  .section-html-content :global(code) {
+    background: #F1F5F9;
+    color: var(--color-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: monospace;
+  }
+  .section-html-content :global(pre code) {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+
+  /* FAQ Block */
+  .guide-faq-block {
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 2px dashed #E2E8F0;
+  }
+  .faq-block-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .faq-icon-disc {
+    width: 36px;
+    height: 36px;
+    background: #EBF3FF;
+    color: var(--color-primary);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .faq-block-h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  .guide-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .faq-item[open] {
+    background: #FFFFFF;
+    border-color: #CBD5E1;
+  }
+  .faq-question {
+    padding: 14px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .faq-num {
+    color: var(--color-primary);
+    font-weight: 800;
+  }
+  .faq-answer {
+    padding: 0 18px 16px 18px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: #475569;
+  }
+  .faq-answer p {
+    margin: 0;
+  }
+
+  /* Related Brands */
+  .related-brands-card {
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: 32px;
+  }
+  .related-brands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .brand-match-pill-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    gap: 8px;
+    transition: all 0.15s ease;
+  }
+  .brand-match-pill-card:hover {
+    background: #FFFFFF;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+  }
+  .brand-match-info {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .match-order {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748B;
+  }
+  .match-name-link {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+  .match-name-link:hover {
+    color: var(--color-primary);
+  }
+  .match-en {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+  }
+  .match-specs {
+    display: flex;
+    gap: 6px;
+  }
+  .spec-text {
+    font-size: 11.5px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #475569;
+  }
+  .btn-check-brand {
+    font-size: 12.5px;
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 4px;
+  }
+
+  /* More Guides */
+  .more-guides-section {
+    margin-top: 8px;
+  }
+  .more-guides-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 16px;
+  }
+  .more-guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .more-guide-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .more-guide-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+  }
+  .more-cat {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+  }
+  .more-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    line-height: 1.45;
+    margin: 0 0 12px 0;
+    flex-grow: 1;
+  }
+  .more-link {
+    font-size: 12.5px;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  /* Back Hub */
+  .back-hub-wrap {
+    text-align: center;
+    padding: 12px 0;
+  }
+  .btn-back-hub {
+    display: inline-block;
+    padding: 11px 24px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    color: var(--color-text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-back-hub:hover {
+    background: #F8FAFC;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    .guide-main-h1 {
+      font-size: 22px;
+    }
+    .guide-content-wrapper {
+      padding: 24px 18px;
+    }
+  }
+</style>

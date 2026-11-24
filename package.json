@@ -1,0 +1,27 @@
+{
+  "name": "jichangrizhi-blog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "2027 机场日志 · Airport Journal MAX —— 专业机场品牌资料、套餐价格与使用指南",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "prebuild": "node scripts/build-search-index.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "indexnow": "node scripts/indexnow.mjs",
+    "validate": "node scripts/validate.mjs"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.0",
+    "astro": "^7.4.8",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "node-html-parser": "^9.0.7",
+    "typescript": "^5.9.3"
+  }
+}

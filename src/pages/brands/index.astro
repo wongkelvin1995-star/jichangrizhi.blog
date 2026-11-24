@@ -1,0 +1,746 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllBrands } from '../../lib/brand-parser.ts';
+import { BRAND_ORDER } from '../../lib/brand-config.ts';
+
+const brands = getAllBrands();
+
+// SEO Metadata strictly per instruction
+const pageTitle = "2027机场品牌目录大全｜热门机场名称索引与品牌查询 - 机场日志";
+const pageDescription = "机场日志品牌目录汇总各类机场品牌名称、品牌分类及档案入口，为用户提供便捷的机场品牌索引与资料查询服务。";
+const canonicalPath = "/brands/";
+
+// Map brand order with letter keys
+interface BrandDirectoryItem {
+  order: number;
+  id: string;
+  name: string;
+  englishName: string;
+  tagline: string;
+  badge?: string;
+  pinyinLetter: string;
+  category: string;
+  nodeRegions: string;
+  protocols: string;
+}
+
+const letterMap: Record<string, string> = {
+  lingdongyun: 'L',
+  muguang: 'M',
+  weifeng: 'W',
+  dalaoyun: 'D',
+  flyv: 'F',
+  feimaoyun: 'F',
+  langwang: 'L',
+  yinxingren: 'Y',
+  tiziyun: 'T',
+  wuyoulianjie: 'W',
+  firefly: 'F',
+  quanqiuyun: 'Q',
+  weituyun: 'W',
+  u1s1: 'U',
+  sogoyun: 'S',
+  kuajieyun: 'K',
+  lingmaonetwork: 'L',
+  shanyue: 'S'
+};
+
+const directoryItems: BrandDirectoryItem[] = BRAND_ORDER.map(cfg => {
+  const brand = brands.find(b => b.id === cfg.id);
+  const letter = letterMap[cfg.id] || cfg.name.charAt(0).toUpperCase();
+
+  let category = '综合型';
+  if ((brand?.lineTypes || '').toLowerCase().includes('iplc') || (cfg.badge || '').includes('专线')) {
+    category = '专线旗舰';
+  } else if ((brand?.lineTypes || '').toLowerCase().includes('bgp')) {
+    category = '极速隧道';
+  } else if ((cfg.tagline || '').includes('性价比') || (cfg.tagline || '').includes('实惠')) {
+    category = '高性价比';
+  }
+
+  return {
+    order: cfg.order,
+    id: cfg.id,
+    name: cfg.name,
+    englishName: brand?.englishName || '',
+    tagline: cfg.tagline || brand?.positioning || '高质量网络加速服务',
+    badge: cfg.badge,
+    pinyinLetter: letter,
+    category,
+    nodeRegions: brand?.nodeRegions || '主流国家和地区',
+    protocols: brand?.protocols || '通用协议'
+  };
+});
+
+// Group by alphabet letter
+const availableLetters = Array.from(new Set(directoryItems.map(item => item.pinyinLetter))).sort();
+
+// Schemas
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: '首页',
+      item: 'https://jichangrizhi.blog/'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: '品牌目录',
+      item: 'https://jichangrizhi.blog/brands/'
+    }
+  ]
+};
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: pageTitle,
+  description: pageDescription,
+  numberOfItems: directoryItems.length,
+  itemListElement: directoryItems.map((item, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: `${item.name} (${item.englishName})`,
+    url: `https://jichangrizhi.blog/airports/${item.id}/`
+  }))
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath={canonicalPath}
+  jsonLdSchema={[breadcrumbSchema, itemListSchema]}
+>
+  <div class="brands-directory-page">
+    <!-- Breadcrumbs -->
+    <nav class="page-breadcrumbs container" aria-label="面包屑导航">
+      <ol class="breadcrumb-list">
+        <li><a href="/">首页</a></li>
+        <li class="separator">/</li>
+        <li aria-current="page">品牌目录</li>
+      </ol>
+    </nav>
+
+    <!-- Header Banner -->
+    <header class="page-header-banner">
+      <div class="container">
+        <div class="banner-badge-wrap">
+          <span class="badge-tag blue">品牌索引中心</span>
+          <span class="badge-tag success">在编 {directoryItems.length} 个独立品牌</span>
+        </div>
+        <h1 class="page-main-h1">2027机场品牌目录与分类索引</h1>
+        <p class="page-intro-desc">
+          机场日志品牌目录汇总各类机场品牌名称、品牌分类及档案入口，为用户提供便捷的机场品牌索引与资料查询服务。
+        </p>
+
+        <!-- Core Keyword Strip -->
+        <div class="seo-keywords-strip">
+          <span class="kw-label">检索维度：</span>
+          <span class="kw-tag">机场品牌</span>
+          <span class="kw-tag">机场品牌大全</span>
+          <span class="kw-tag">机场名称大全</span>
+          <span class="kw-tag">机场目录</span>
+          <span class="kw-tag">机场列表</span>
+          <span class="kw-tag">热门机场品牌</span>
+        </div>
+
+        <!-- Directory Quick Search Box -->
+        <div class="brands-search-wrapper">
+          <div class="search-input-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="search"
+              id="brandDirectorySearch"
+              class="brand-search-input"
+              placeholder="按品牌中文名、英文名、拼音或定位快速筛选（如：灵动、FLYV、大佬云、Dalao）..."
+              aria-label="快速检索机场品牌名称"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <!-- A-Z Alphabet Jump Bar -->
+        <nav class="alphabet-nav" aria-label="拼音与英文首字母索引">
+          <span class="alphabet-nav-label">字母索引：</span>
+          <div class="alphabet-letters-list">
+            <button type="button" class="letter-btn active" data-letter="all">全部</button>
+            {availableLetters.map(letter => (
+              <button type="button" class="letter-btn" data-letter={letter}>{letter}</button>
+            ))}
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Directory Grid -->
+    <main class="container directory-main-content">
+      <!-- Category Tabs -->
+      <div class="category-tabs-bar">
+        <button type="button" class="category-tab active" data-cat="all">全部品牌 ({directoryItems.length})</button>
+        <button type="button" class="category-tab" data-cat="专线旗舰">专线旗舰</button>
+        <button type="button" class="category-tab" data-cat="极速隧道">极速隧道</button>
+        <button type="button" class="category-tab" data-cat="高性价比">高性价比</button>
+      </div>
+
+      <!-- Grid of Brand Index Cards -->
+      <div class="brand-cards-grid" id="brandIndexGrid">
+        {directoryItems.map(item => (
+          <article
+            class="journal-card brand-index-card"
+            data-brand-id={item.id}
+            data-name={item.name.toLowerCase()}
+            data-en={item.englishName.toLowerCase()}
+            data-letter={item.pinyinLetter}
+            data-category={item.category}
+          >
+            <!-- Card Top: Order & Letter -->
+            <div class="card-meta-top">
+              <span class="letter-badge">{item.pinyinLetter}</span>
+              <div class="meta-right">
+                <span class="order-badge">#{String(item.order).padStart(2, '0')}</span>
+                {item.badge && <span class="badge-tag blue">{item.badge}</span>}
+              </div>
+            </div>
+
+            <!-- Brand Logo & Identity -->
+            <div class="brand-identity-row">
+              <div class="brand-logo-disc">
+                <span class="brand-initial">{item.name.charAt(0)}</span>
+              </div>
+              <div class="brand-name-group">
+                <h2 class="brand-title">
+                  <a href={`/airports/${item.id}/`} class="brand-title-link">
+                    {item.name}
+                  </a>
+                </h2>
+                <span class="brand-en-sub">{item.englishName}</span>
+              </div>
+            </div>
+
+            <!-- Positioning & Tagline -->
+            <p class="brand-tagline-text">{item.tagline}</p>
+
+            <!-- Features Summary Tags -->
+            <div class="brand-feature-tags">
+              <span class="tag-pill category-pill">{item.category}</span>
+              <span class="tag-pill node-pill" title={item.nodeRegions}>覆盖 {item.nodeRegions.split(/[,/、]/)[0]} 等</span>
+              <span class="tag-pill proto-pill">{item.protocols.split(/[,/、]/)[0]}</span>
+            </div>
+
+            <!-- Action Link to Unified Brand Archive URL -->
+            <div class="card-action-wrap">
+              <a href={`/airports/${item.id}/`} class="btn-view-brand-archive">
+                <span>查看品牌档案与评测</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <!-- No Results Banner -->
+      <div id="noDirectoryResults" class="no-directory-banner" style="display: none;">
+        <p class="empty-title">未找到匹配的品牌名称</p>
+        <p class="empty-desc">请清除搜索词或切换字母索引查看完整列表。</p>
+      </div>
+
+      <!-- Cross Navigation Note -->
+      <section class="directory-cross-nav journal-card">
+        <div class="cross-nav-left">
+          <h3 class="cross-nav-title">正在寻找特定套餐价格与线路明细？</h3>
+          <p class="cross-nav-desc">
+            若需对比各大品牌的具体月付价格、线路协议支持与节点分布，欢迎查阅完整的<strong>机场档案数据库</strong>。
+          </p>
+        </div>
+        <div class="cross-nav-right">
+          <a href="/airports/" class="btn-cross-archive">前往 2027 机场档案大全 →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  const searchInput = document.getElementById('brandDirectorySearch') as HTMLInputElement | null;
+  const cards = document.querySelectorAll('.brand-index-card') as NodeListOf<HTMLElement>;
+  const letterButtons = document.querySelectorAll('.letter-btn') as NodeListOf<HTMLButtonElement>;
+  const categoryTabs = document.querySelectorAll('.category-tab') as NodeListOf<HTMLButtonElement>;
+  const noResults = document.getElementById('noDirectoryResults');
+
+  let activeLetter = 'all';
+  let activeCategory = 'all';
+  let searchTerm = '';
+
+  const applyFilters = () => {
+    let matched = 0;
+    cards.forEach(card => {
+      const name = card.dataset.name || '';
+      const en = card.dataset.en || '';
+      const letter = card.dataset.letter || '';
+      const category = card.dataset.category || '';
+
+      const matchesSearch = !searchTerm || name.includes(searchTerm) || en.includes(searchTerm);
+      const matchesLetter = activeLetter === 'all' || letter === activeLetter;
+      const matchesCategory = activeCategory === 'all' || category === activeCategory;
+
+      if (matchesSearch && matchesLetter && matchesCategory) {
+        card.style.display = 'flex';
+        matched++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (noResults) {
+      noResults.style.display = matched === 0 ? 'block' : 'none';
+    }
+  };
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      searchTerm = searchInput.value.trim().toLowerCase();
+      applyFilters();
+    });
+  }
+
+  letterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      letterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeLetter = btn.dataset.letter || 'all';
+      applyFilters();
+    });
+  });
+
+  categoryTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      categoryTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeCategory = tab.dataset.cat || 'all';
+      applyFilters();
+    });
+  });
+</script>
+
+<style>
+  .brands-directory-page {
+    padding-bottom: 72px;
+  }
+
+  /* Breadcrumbs */
+  .page-breadcrumbs {
+    padding-top: 20px;
+    padding-bottom: 12px;
+  }
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .breadcrumb-list a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .breadcrumb-list a:hover {
+    color: var(--color-primary);
+  }
+  .breadcrumb-list .separator {
+    color: #BDC5D0;
+  }
+
+  /* Header Banner */
+  .page-header-banner {
+    padding: 32px 0 28px 0;
+    background: linear-gradient(180deg, rgba(235, 243, 255, 0.4) 0%, rgba(255, 255, 255, 0) 100%);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  }
+  .banner-badge-wrap {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .page-main-h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    margin-bottom: 14px;
+    line-height: 1.25;
+  }
+  .page-intro-desc {
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    max-width: 860px;
+    line-height: 1.65;
+    margin-bottom: 18px;
+  }
+
+  .seo-keywords-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    font-size: 13px;
+  }
+  .kw-label {
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+  .kw-tag {
+    background: #F1F5F9;
+    color: #475569;
+    padding: 2px 9px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  .brands-search-wrapper {
+    margin-bottom: 20px;
+  }
+  .search-input-box {
+    position: relative;
+    max-width: 680px;
+  }
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+  }
+  .brand-search-input {
+    width: 100%;
+    height: 46px;
+    padding-left: 44px;
+    padding-right: 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    font-size: 14.5px;
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+  }
+  .brand-search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(40, 92, 240, 0.12);
+  }
+
+  /* Alphabet Jump Bar */
+  .alphabet-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+  }
+  .alphabet-nav-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+  .alphabet-letters-list {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .letter-btn {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .letter-btn:hover {
+    background: #E2E8F0;
+    color: var(--color-text-primary);
+  }
+  .letter-btn.active {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-color: var(--color-primary);
+  }
+
+  /* Main Directory Grid */
+  .directory-main-content {
+    padding-top: 32px;
+  }
+
+  .category-tabs-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .category-tab {
+    padding: 8px 18px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .category-tab:hover {
+    border-color: #CBD5E1;
+    color: var(--color-text-primary);
+  }
+  .category-tab.active {
+    background: #1E293B;
+    color: #FFFFFF;
+    border-color: #1E293B;
+  }
+
+  .brand-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .brand-index-card {
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    transition: all 0.2s ease;
+  }
+  .brand-index-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: #CBD5E1;
+  }
+
+  .card-meta-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .letter-badge {
+    width: 26px;
+    height: 26px;
+    background: #EEF4FF;
+    color: var(--color-primary);
+    font-weight: 800;
+    font-size: 13px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .meta-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .order-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748B;
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .brand-identity-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .brand-logo-disc {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #285CF0 0%, #153FB8 100%);
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 800;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(40, 92, 240, 0.2);
+    flex-shrink: 0;
+  }
+  .brand-name-group {
+    overflow: hidden;
+  }
+  .brand-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 2px 0;
+    line-height: 1.3;
+  }
+  .brand-title-link {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .brand-title-link:hover {
+    color: var(--color-primary);
+  }
+  .brand-en-sub {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    display: block;
+  }
+
+  .brand-tagline-text {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin: 0 0 16px 0;
+    flex-grow: 1;
+  }
+
+  .brand-feature-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .tag-pill {
+    font-size: 11.5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #F1F5F9;
+    color: #475569;
+    font-weight: 500;
+  }
+  .category-pill {
+    background: #EBF3FF;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .card-action-wrap {
+    margin-top: auto;
+  }
+  .btn-view-brand-archive {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 14px;
+    background: #F8FAFC;
+    color: var(--color-text-primary);
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: var(--radius-btn);
+    border: 1px solid #E2E8F0;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-view-brand-archive:hover {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-color: var(--color-primary);
+  }
+
+  .no-directory-banner {
+    padding: 60px 20px;
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-card);
+  }
+  .empty-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+  }
+  .empty-desc {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* Cross Navigation Note */
+  .directory-cross-nav {
+    margin-top: 48px;
+    padding: 24px 32px;
+    background: #FFFFFF;
+    border: 1px solid #D8E7FD;
+    border-radius: var(--radius-card);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .cross-nav-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 6px 0;
+  }
+  .cross-nav-desc {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+  .btn-cross-archive {
+    display: inline-block;
+    padding: 11px 22px;
+    background: var(--color-primary);
+    color: #FFFFFF;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: var(--radius-btn);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+  }
+  .btn-cross-archive:hover {
+    background: #1B4FD8;
+  }
+
+  @media (max-width: 768px) {
+    .page-main-h1 {
+      font-size: 24px;
+    }
+    .brand-cards-grid {
+      grid-template-columns: 1fr;
+    }
+    .directory-cross-nav {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+    }
+  }
+</style>

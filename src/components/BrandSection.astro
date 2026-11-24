@@ -1,0 +1,101 @@
+---
+import type { BrandMeta } from '../lib/types';
+
+interface Props {
+  brand: BrandMeta;
+}
+
+const { brand } = Astro.props;
+
+// Determine action link (official or purchase)
+const primaryActionUrl = brand.registerUrl || brand.website || brand.links.purchase || brand.links.official;
+const isAff = /aff|code=|invite/i.test(primaryActionUrl);
+---
+
+<article
+  class="brand-article-card"
+  id={brand.id}
+  data-brand-name={brand.brandName}
+  data-brand-english={brand.englishName}
+  data-brand-tags={`${brand.lineTypes} ${brand.nodeRegions} ${brand.protocols}`}
+>
+  <!-- Brand Header Card -->
+  <header class="brand-card-header">
+    <div class="brand-meta-badge-row">
+      <span class="brand-order-pill">序位 {String(brand.order).padStart(2, '0')}</span>
+      {brand.lineTypes && <span class="badge-tag blue">{brand.lineTypes.split(/[、,]/)[0]}</span>}
+      {brand.nodeRegions && <span class="badge-tag success">覆盖 {brand.nodeRegions.split(/[、,]/).slice(0, 3).join(' / ')}</span>}
+      <span class="badge-tag warning">核实: {brand.source.verifyDate.slice(0, 10)}</span>
+    </div>
+
+    <div class="brand-title-wrap">
+      <div>
+        <h2 class="brand-main-h2" id={`${brand.id}-title`}>
+          {brand.brandName} 机场资料
+        </h2>
+        {brand.englishName && (
+          <div class="brand-english-name">
+            {brand.englishName} {brand.aliases ? `· 别名：${brand.aliases}` : ''}
+          </div>
+        )}
+      </div>
+
+      <div class="brand-quick-actions">
+        {primaryActionUrl && (
+          <a
+            href={primaryActionUrl}
+            target="_blank"
+            rel={isAff ? "sponsored noopener noreferrer" : "noopener noreferrer"}
+            class="btn btn-primary"
+            aria-label={`访问 ${brand.brandName} 官网或注册入口`}
+          >
+            <span>{isAff ? '进入注册/购买入口' : '访问官方站点'}</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+        )}
+        <a href="#directory" class="btn btn-secondary" aria-label="返回品牌目录">
+          <span>回目录 ↑</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Complete 8 Chapters HTML (SSG Pre-rendered) -->
+  <div class="brand-full-markdown-body">
+    <Fragment set:html={brand.renderedHtml} />
+  </div>
+
+  <!-- Dedicated Brand FAQ (6 to 8 questions strictly based on MD) -->
+  <section class="brand-faq-box" id={`${brand.id}-faq`}>
+    <header class="brand-faq-header">
+      <h3 class="brand-faq-h3">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <span>{brand.brandName} · 专属常见问题（FAQ）</span>
+      </h3>
+      <p class="section-sub-desc" style="margin-top: 4px;">
+        根据《{brand.brandName}》原始资料提炼，严格基于公开记录作答，不含虚构承诺。
+      </p>
+    </header>
+
+    <div class="brand-faq-grid">
+      {brand.faqList.map((faq, idx) => (
+        <details class="faq-accordion-item" open={idx < 2}>
+          <summary class="faq-question-h4">
+            <span>{faq.question}</span>
+          </summary>
+          <div class="faq-answer-p">
+            {faq.answer}
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+</article>

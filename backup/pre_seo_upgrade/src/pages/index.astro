@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import FeaturedCards from '../components/FeaturedCards.astro';
+import HotTopicsBar from '../components/HotTopicsBar.astro';
+import BrandDirectory from '../components/BrandDirectory.astro';
+import BrandSection from '../components/BrandSection.astro';
+import PlansOverview from '../components/PlansOverview.astro';
+import NodesOverview from '../components/NodesOverview.astro';
+import GuideSection from '../components/GuideSection.astro';
+import ArticlesSection from '../components/ArticlesSection.astro';
+import AboutSection from '../components/AboutSection.astro';
+import { getAllBrands } from '../lib/brand-parser.ts';
+
+const brands = getAllBrands();
+
+// Build ItemList schema for all brands on the home page
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: '2027 机场日志收录品牌清单',
+  description: '涵盖灵动云、暮光加速、微风网络、FLYV、飞猫云等17家机场品牌的完整档案',
+  numberOfItems: brands.length,
+  itemListElement: brands.map((b, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: `${b.brandName} 机场资料`,
+    url: `https://jichangrizhi.blog/#${b.id}`
+  }))
+};
+---
+
+<BaseLayout
+  title="2027 机场日志 - 机场品牌资料、套餐价格、节点地区与使用指南"
+  description="2027 机场日志整理灵动云、暮光加速、微风网络、FLYV、飞猫云等机场品牌资料，提供套餐价格、节点地区、客户端使用说明与常见问题，并持续记录服务动态。"
+  canonicalPath="/"
+  jsonLdSchema={[itemListSchema]}
+>
+  <!-- Hero Section -->
+  <Hero brandCount={brands.length} />
+
+  <!-- Featured Cards (3 Columns) -->
+  <FeaturedCards />
+
+  <!-- Hot Topics Quick Bar -->
+  <HotTopicsBar />
+
+  <!-- Fast Directory & Index Table of Contents -->
+  <BrandDirectory brands={brands} />
+
+  <!-- All 17 Brand Full-Text Articles (Sequential Flow) -->
+  <section class="airports-main-flow" id="airports">
+    <div class="container">
+      <div class="section-heading-bar">
+        <div class="section-heading-left">
+          <span class="heading-accent-bar"></span>
+          <h2 class="section-main-title">全部机场档案全文（共 {brands.length} 家品牌）</h2>
+          <span class="section-sub-desc">已完整导入各品牌原始资料、八大章节、套餐明细表格与专属 FAQ</span>
+        </div>
+      </div>
+
+      <div class="brands-list-container">
+        {brands.map(brand => (
+          <BrandSection brand={brand} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Plans & Pricing Overview Anchor Section -->
+  <PlansOverview />
+
+  <!-- Nodes & Regions Overview Anchor Section -->
+  <NodesOverview />
+
+  <!-- Practical Usage & Selection Guide Section -->
+  <GuideSection />
+
+  <!-- Articles Log Section (Displays user MDs or empty placeholder) -->
+  <ArticlesSection />
+
+  <!-- About, Disclaimers, Sponsorship & Correction Section -->
+  <AboutSection />
+</BaseLayout>
+
+<style>
+  .airports-main-flow {
+    padding: 32px 0 48px 0;
+  }
+
+  .brands-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+</style>

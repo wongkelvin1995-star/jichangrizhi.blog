@@ -1,0 +1,448 @@
+---
+import PersonalCenterLayout from '../../layouts/PersonalCenterLayout.astro';
+---
+
+<PersonalCenterLayout
+  title="意见反馈 · 个人中心 MAX - 机场日志"
+  description="提交机场套餐资费纠错、节点连通性反馈、新品牌收录建议或网站功能改进意见，技术团队将在 12~24 小时内复核响应。"
+  activeTab="feedback"
+  pageHeading="意见反馈"
+>
+  <div class="personal-subpage-wrap">
+    <!-- Subpage Action Bar -->
+    <header class="subpage-header-card journal-card">
+      <div class="subpage-header-left">
+        <h1 class="subpage-main-h1">意见反馈与纠错通道</h1>
+        <p class="subpage-desc">
+          我们高度重视每一位读者的真实反馈。若发现品牌套餐价格有变动、节点资料有误或有功能改进提议，请通过以下专属渠道与编辑部联络。
+        </p>
+      </div>
+
+      <div class="subpage-header-controls">
+        <button type="button" id="btnCopyEmailTop" class="btn-copy-email">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>复制官方邮箱</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Grid: Form + Info -->
+    <div class="feedback-grid">
+      <!-- Left Column: Interactive Form Helper -->
+      <section class="journal-card feedback-form-card">
+        <div class="form-header">
+          <h2 class="form-title">快速生成邮件反馈</h2>
+          <p class="form-sub">填写以下要点，一键复制格式化内容并唤起您的系统邮件客户端：</p>
+        </div>
+
+        <form id="feedbackForm" class="feedback-form" onsubmit="return false;">
+          <div class="form-field">
+            <label for="fbTypeSelect" class="field-label">反馈类别 <span class="required">*</span></label>
+            <select id="fbTypeSelect" class="field-select">
+              <option value="品牌套餐资费纠错">品牌套餐资费纠错</option>
+              <option value="节点连通性/异常报告">节点连通性 / 异常报告</option>
+              <option value="新品牌收录自荐与评测申请">新品牌收录自荐与评测申请</option>
+              <option value="网站功能建议与使用体验提议">网站功能建议与使用体验提议</option>
+              <option value="安全预警补充与风险追踪">安全预警补充与风险追踪</option>
+              <option value="其它合作与事务联络">其它合作与事务联络</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="fbSubject" class="field-label">反馈主题 <span class="required">*</span></label>
+            <input
+              type="text"
+              id="fbSubject"
+              class="field-input"
+              placeholder="简述反馈的核心要点（例如：某品牌最新节假日资费变动）"
+              required
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="fbContent" class="field-label">详细情况说明 <span class="required">*</span></label>
+            <textarea
+              id="fbContent"
+              class="field-textarea"
+              rows="6"
+              placeholder="请尽量提供详细信息，如涉及价格变动请提供官方最新价格及截图链接；如反馈节点问题请注明受影响节点及测试网络环境。"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="fbContact" class="field-label">您的联系方式（选填）</label>
+            <input
+              type="text"
+              id="fbContact"
+              class="field-input"
+              placeholder="您的电子邮箱或 Telegram 用户名，便于技术团队向您答复处理进展"
+            />
+          </div>
+
+          <div class="form-action-row">
+            <button type="button" id="btnSendFeedbackMail" class="btn-submit-feedback">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              <span>复制内容并唤起邮件发送</span>
+            </button>
+            <span id="feedbackStatusTip" class="status-tip-text" style="display: none;">内容已复制并正在唤起邮箱客户端...</span>
+          </div>
+        </form>
+      </section>
+
+      <!-- Right Column: Official Info & Guidelines -->
+      <aside class="feedback-info-col">
+        <div class="journal-card info-card">
+          <h3 class="info-card-h3">官方直连联络方式</h3>
+          <div class="contact-pill-box">
+            <span class="contact-label">编辑部电子邮箱：</span>
+            <a href="mailto:feedback@jichangrizhi.blog" class="contact-email-link">
+              feedback@jichangrizhi.blog
+            </a>
+          </div>
+          <p class="info-note">
+            为保障通信安全性与信息防篡改，建议通过支持端到端加密的通用邮箱进行联络。
+          </p>
+        </div>
+
+        <div class="journal-card info-card">
+          <h3 class="info-card-h3">核验与响应时限 (SLA)</h3>
+          <ul class="sla-list">
+            <li>
+              <strong>价格与套餐纠错：</strong>12 小时内由编辑人工核验官方控制台并更新网页。
+            </li>
+            <li>
+              <strong>突发连通性风险：</strong>24 小时内安排节点探针交叉复测，视情况标注观察标签。
+            </li>
+            <li>
+              <strong>新品牌收录审核：</strong>严格按照收录准则进行 3~7 天网络稳定性观察。
+            </li>
+          </ul>
+        </div>
+
+        <div class="journal-card info-card callout">
+          <h3 class="info-card-h3">🛡️ 客观中立声明</h3>
+          <p class="info-note">
+            机场日志坚持独立客观记录，绝不接受任何服务商的有偿删帖或恶意抹黑要求。所有收录与风险标注均以公开证据与真实测试为准。
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</PersonalCenterLayout>
+
+<script>
+  const copyBtnTop = document.getElementById('btnCopyEmailTop');
+  const btnSend = document.getElementById('btnSendFeedbackMail');
+  const typeSelect = document.getElementById('fbTypeSelect') as HTMLSelectElement | null;
+  const subjectInput = document.getElementById('fbSubject') as HTMLInputElement | null;
+  const contentInput = document.getElementById('fbContent') as HTMLTextAreaElement | null;
+  const contactInput = document.getElementById('fbContact') as HTMLInputElement | null;
+  const tipText = document.getElementById('feedbackStatusTip');
+
+  const OFFICIAL_EMAIL = 'feedback@jichangrizhi.blog';
+
+  function copyToClipboard(text: string, successCallback: () => void) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(successCallback);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      successCallback();
+    }
+  }
+
+  if (copyBtnTop) {
+    copyBtnTop.addEventListener('click', () => {
+      copyToClipboard(OFFICIAL_EMAIL, () => {
+        alert(`官方邮箱已复制到剪贴板：${OFFICIAL_EMAIL}`);
+      });
+    });
+  }
+
+  if (btnSend) {
+    btnSend.addEventListener('click', () => {
+      const fbType = typeSelect ? typeSelect.value : '一般反馈';
+      const subj = subjectInput ? subjectInput.value.trim() : '';
+      const content = contentInput ? contentInput.value.trim() : '';
+      const contact = contactInput ? contactInput.value.trim() : '未提供';
+
+      if (!subj || !content) {
+        alert('请填写反馈主题和详细情况说明后再发送');
+        return;
+      }
+
+      const emailSubject = `[机场日志反馈 - ${fbType}] ${subj}`;
+      const emailBody = `【反馈类别】：${fbType}
+【反馈主题】：${subj}
+【联系方式】：${contact}
+
+【详细说明】：
+${content}
+
+----------------------------------------
+发送自：2027 机场日志个人中心 (jichangrizhi.blog)
+时间：${new Date().toLocaleString('zh-CN')}`;
+
+      // Copy text to clipboard first
+      copyToClipboard(emailBody, () => {
+        if (tipText) {
+          tipText.style.display = 'inline';
+        }
+
+        // Open mailto
+        const mailtoUrl = `mailto:${OFFICIAL_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+        window.location.href = mailtoUrl;
+
+        setTimeout(() => {
+          if (tipText) tipText.style.display = 'none';
+        }, 5000);
+      });
+    });
+  }
+</script>
+
+<style>
+  .personal-subpage-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Subpage Header Card */
+  .subpage-header-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+    flex-wrap: wrap;
+  }
+  .subpage-header-left {
+    max-width: 540px;
+  }
+  .subpage-main-h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0 0 6px 0;
+  }
+  .subpage-desc {
+    font-size: 13.5px;
+    color: #647B95;
+    margin: 0;
+  }
+  .btn-copy-email {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: #F0F5FB;
+    border: 1px solid #DFE7F1;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #142B48;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-copy-email:hover {
+    background: #2454ED;
+    border-color: #2454ED;
+    color: #FFFFFF;
+  }
+
+  /* Grid: Form + Info */
+  .feedback-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .feedback-form-card {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+  }
+  .form-header {
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #F0F5FB;
+  }
+  .form-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #142B48;
+    margin: 0 0 4px 0;
+  }
+  .form-sub {
+    font-size: 13px;
+    color: #647B95;
+    margin: 0;
+  }
+
+  .feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #142B48;
+  }
+  .required {
+    color: #EF4444;
+  }
+  .field-select, .field-input {
+    height: 42px;
+    padding: 0 14px;
+    background: #F8FAFD;
+    border: 1px solid #DFE7F1;
+    border-radius: 10px;
+    font-size: 13.5px;
+    color: #142B48;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+  .field-select:focus, .field-input:focus, .field-textarea:focus {
+    background: #FFFFFF;
+    border-color: #2454ED;
+    box-shadow: 0 0 0 3px rgba(36, 84, 237, 0.1);
+  }
+  .field-textarea {
+    padding: 12px 14px;
+    background: #F8FAFD;
+    border: 1px solid #DFE7F1;
+    border-radius: 10px;
+    font-size: 13.5px;
+    color: #142B48;
+    resize: vertical;
+    outline: none;
+    line-height: 1.6;
+    transition: all 0.2s ease;
+  }
+
+  .form-action-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 6px;
+    flex-wrap: wrap;
+  }
+  .btn-submit-feedback {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #2454ED;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(36, 84, 237, 0.25);
+    transition: all 0.15s ease;
+  }
+  .btn-submit-feedback:hover {
+    background: #173B9C;
+    transform: translateY(-1px);
+  }
+  .status-tip-text {
+    font-size: 12.5px;
+    color: #16A34A;
+    font-weight: 600;
+  }
+
+  /* Right Info Column */
+  .feedback-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .info-card {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+  }
+  .info-card.callout {
+    background: #F0F5FB;
+    border-color: #D2E3FC;
+  }
+  .info-card-h3 {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #142B48;
+    margin: 0 0 10px 0;
+  }
+  .contact-pill-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  .contact-label {
+    font-size: 12px;
+    color: #647B95;
+  }
+  .contact-email-link {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #2454ED;
+    text-decoration: none;
+    word-break: break-all;
+  }
+  .contact-email-link:hover {
+    text-decoration: underline;
+  }
+  .info-note {
+    font-size: 12.5px;
+    color: #647B95;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .sla-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 12.5px;
+    color: #647B95;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sla-list strong {
+    color: #142B48;
+  }
+
+  @media (max-width: 900px) {
+    .feedback-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

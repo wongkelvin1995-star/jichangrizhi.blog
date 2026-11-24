@@ -1,0 +1,8 @@
+# robots.txt for https://jichangrizhi.blog/
+# 允许 Bing、Google 等搜索引擎合规爬虫抓取全部公开内容
+
+User-agent: *
+Allow: /
+
+# 网站地图
+Sitemap: https://jichangrizhi.blog/sitemap.xml

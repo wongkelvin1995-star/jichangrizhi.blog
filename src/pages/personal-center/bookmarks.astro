@@ -1,0 +1,405 @@
+---
+import PersonalCenterLayout from '../../layouts/PersonalCenterLayout.astro';
+---
+
+<PersonalCenterLayout
+  title="文章收藏 · 个人中心 MAX - 机场日志"
+  description="查看与管理您收藏的机场客户端配置教程、选购指南与避坑实战手册。"
+  activeTab="bookmarks"
+  pageHeading="文章收藏"
+>
+  <div class="personal-subpage-wrap">
+    <!-- Subpage Action Bar -->
+    <header class="subpage-header-card journal-card">
+      <div class="subpage-header-left">
+        <div class="title-with-count">
+          <h1 class="subpage-main-h1">已收藏的指南教程</h1>
+          <span class="count-tag" id="bkmTotalCountTag">0</span>
+        </div>
+        <p class="subpage-desc">
+          归纳整理全平台客户端配置、测速排障与防失联策略，助您随时回顾重要技术指南。
+        </p>
+      </div>
+
+      <div class="subpage-header-controls">
+        <div class="category-filter-bar" id="bkmCategoryFilter">
+          <button type="button" class="filter-tab-btn active" data-cat="all">全部类别</button>
+          <button type="button" class="filter-tab-btn" data-cat="客户端配置">客户端配置</button>
+          <button type="button" class="filter-tab-btn" data-cat="基础使用">基础使用</button>
+          <button type="button" class="filter-tab-btn" data-cat="选购指南">选购指南</button>
+          <button type="button" class="filter-tab-btn" data-cat="故障排查">故障排查</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Bookmarks Grid -->
+    <main class="bookmarks-grid-wrap" id="bookmarksGrid">
+      <!-- Rendered dynamically via JS -->
+    </main>
+
+    <!-- Empty State Placeholder -->
+    <div id="bookmarksEmptyState" class="empty-state-box journal-card" style="display: none;">
+      <div class="empty-icon-circle">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2454ED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <h2 class="empty-title">您尚未收藏任何指南文章</h2>
+      <p class="empty-desc">
+        在「使用指南」专区或任一实战配置教程页面，点击「收藏指南」即可加入此列表，离线永久记录在您的浏览器中。
+      </p>
+      <div class="empty-actions">
+        <a href="/guides/" class="btn-empty-primary">
+          <span>前往 2027 机场指南中心</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</PersonalCenterLayout>
+
+<script>
+  import { UserStore } from '../../lib/user-store.ts';
+
+  const grid = document.getElementById('bookmarksGrid');
+  const emptyBox = document.getElementById('bookmarksEmptyState');
+  const countTag = document.getElementById('bkmTotalCountTag');
+  const filterBtns = document.querySelectorAll('#bkmCategoryFilter .filter-tab-btn') as NodeListOf<HTMLButtonElement>;
+
+  let activeCat = 'all';
+
+  function renderBookmarks() {
+    const list = UserStore.getBookmarks();
+    if (countTag) countTag.textContent = String(list.length);
+
+    if (list.length === 0) {
+      if (grid) grid.innerHTML = '';
+      if (emptyBox) emptyBox.style.display = 'flex';
+      return;
+    }
+
+    if (emptyBox) emptyBox.style.display = 'none';
+
+    const filtered = list.filter(item => {
+      if (activeCat === 'all') return true;
+      return item.category === activeCat;
+    });
+
+    if (filtered.length === 0) {
+      if (grid) {
+        grid.innerHTML = `
+          <div class="journal-card" style="grid-column: 1 / -1; padding: 36px; text-align: center; color: #647B95;">
+            当前「${activeCat}」分类下暂无收藏的文章，可切换至「全部类别」查看。
+          </div>
+        `;
+      }
+      return;
+    }
+
+    if (grid) {
+      grid.innerHTML = filtered.map(item => {
+        const addedDate = new Date(item.addedAt).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+        return `
+          <article class="journal-card bkm-article-card">
+            <div class="card-meta-top">
+              <span class="category-badge">${item.category}</span>
+              <span class="read-time-tag">阅读约 ${item.readTime}</span>
+              <button
+                type="button"
+                class="btn-remove-bkm"
+                data-slug="${item.slug}"
+                title="移出书签"
+                aria-label="移出书签"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            <h3 class="bkm-title">
+              <a href="${item.url}" class="bkm-title-link">${item.title}</a>
+            </h3>
+
+            <p class="bkm-desc">${item.description}</p>
+
+            <div class="card-footer-meta">
+              <span class="date-text">加入于 ${addedDate}</span>
+              <a href="${item.url}" class="btn-read-now">
+                <span>阅读全文</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // Bind remove buttons
+      grid.querySelectorAll('.btn-remove-bkm').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const slug = (btn as HTMLElement).dataset.slug!;
+          UserStore.removeBookmarkArticle(slug);
+          renderBookmarks();
+        });
+      });
+    }
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCat = btn.dataset.cat || 'all';
+      renderBookmarks();
+    });
+  });
+
+  renderBookmarks();
+  window.addEventListener('aj-user-store-updated', () => {
+    renderBookmarks();
+  });
+</script>
+
+<style>
+  .personal-subpage-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Subpage Header Card */
+  .subpage-header-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+    flex-wrap: wrap;
+  }
+  .subpage-header-left {
+    max-width: 500px;
+  }
+  .title-with-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .subpage-main-h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0;
+  }
+  .count-tag {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2454ED;
+    background: #E8F0FE;
+    padding: 2px 9px;
+    border-radius: 12px;
+  }
+  .subpage-desc {
+    font-size: 13.5px;
+    color: #647B95;
+    margin: 0;
+  }
+
+  .category-filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .filter-tab-btn {
+    padding: 7px 14px;
+    background: #F0F5FB;
+    border: 1px solid #DFE7F1;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #647B95;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-tab-btn:hover {
+    background: #E2EBF5;
+    color: #142B48;
+  }
+  .filter-tab-btn.active {
+    background: #2454ED;
+    border-color: #2454ED;
+    color: #FFFFFF;
+  }
+
+  /* Grid */
+  .bookmarks-grid-wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .bkm-article-card {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+    transition: all 0.2s ease;
+  }
+  .bkm-article-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(36, 84, 237, 0.08);
+    border-color: #CBD5E1;
+  }
+  .card-meta-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .category-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #2454ED;
+    background: #E8F0FE;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+  .read-time-tag {
+    font-size: 11.5px;
+    color: #94A3B8;
+  }
+  .btn-remove-bkm {
+    margin-left: auto;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: #F8FAFD;
+    border: 1px solid #EDF2F7;
+    color: #94A3B8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-remove-bkm:hover {
+    background: #FEE2E2;
+    border-color: #FECDD3;
+    color: #EF4444;
+  }
+
+  .bkm-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.4;
+  }
+  .bkm-title-link {
+    color: #142B48;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .bkm-title-link:hover {
+    color: #2454ED;
+  }
+  .bkm-desc {
+    font-size: 13px;
+    color: #647B95;
+    line-height: 1.5;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .card-footer-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #F0F5FB;
+  }
+  .date-text {
+    font-size: 11.5px;
+    color: #94A3B8;
+  }
+  .btn-read-now {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #2454ED;
+    text-decoration: none;
+    transition: gap 0.15s ease;
+  }
+  .btn-read-now:hover {
+    gap: 8px;
+  }
+
+  /* Empty State */
+  .empty-state-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 56px 24px;
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+  }
+  .empty-icon-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #EFF6FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .empty-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0 0 8px 0;
+  }
+  .empty-desc {
+    font-size: 14px;
+    color: #647B95;
+    max-width: 480px;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+  }
+  .btn-empty-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #2454ED;
+    color: #FFFFFF;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 12px rgba(36, 84, 237, 0.25);
+  }
+  .btn-empty-primary:hover {
+    background: #173B9C;
+    transform: translateY(-1px);
+  }
+</style>

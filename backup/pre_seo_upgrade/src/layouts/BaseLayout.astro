@@ -1,0 +1,122 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import AuroraBackground from '../components/AuroraBackground.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  robots?: string;
+  jsonLdSchema?: Record<string, any>[];
+}
+
+const {
+  title = '2027 机场日志 - 机场品牌资料、套餐价格、节点地区与使用指南',
+  description = '2027 机场日志整理灵动云、暮光加速、微风网络、FLYV、飞猫云等机场品牌资料，提供套餐价格、节点地区、客户端使用说明与常见问题，并持续记录服务动态。',
+  canonicalPath = '/',
+  robots = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+  jsonLdSchema = []
+} = Astro.props;
+
+const siteUrl = 'https://jichangrizhi.blog';
+const canonicalUrl = `${siteUrl}${canonicalPath}`;
+
+// Default schemas for Website & Organization
+const defaultSchemas = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: '2027 机场日志',
+    alternateName: 'Airport Journal',
+    url: siteUrl,
+    description: '专业的机场品牌资料、套餐价格、节点地区与使用指南知识库',
+    inLanguage: 'zh-CN'
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: '2027 机场日志团队',
+    url: siteUrl,
+    logo: `${siteUrl}/images/logo-512.png`,
+    sameAs: [siteUrl]
+  },
+  ...jsonLdSchema
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="robots" content={robots} />
+
+    <!-- Bing Webmaster & Search Engine Verification Placeholders -->
+    <!-- 可在此填入站长平台分配的验证代码，例如：<meta name="msvalidate.01" content="..." /> -->
+    <meta name="msvalidate.01" content="" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="2027 机场日志 · Airport Journal" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="zh_CN" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- JSON-LD Structured Data for Bing & Google -->
+    {defaultSchemas.map(schema => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
+  </head>
+  <body>
+    <!-- Apple Aurora Gradient Dynamic Fluid Background -->
+    <AuroraBackground />
+
+    <Header currentPath={canonicalPath} />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      // Global shortcut "/" to focus search input across all pages
+      window.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          const mainSearchInput = document.getElementById('mainSearchPageInput');
+          const navInput = document.getElementById('navQuickSearchInput');
+          const heroInput = document.getElementById('heroBrandSearchInput');
+          if (mainSearchInput) {
+            mainSearchInput.focus();
+            mainSearchInput.select();
+          } else if (navInput) {
+            navInput.focus();
+            navInput.select();
+          } else if (heroInput) {
+            heroInput.focus();
+            heroInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

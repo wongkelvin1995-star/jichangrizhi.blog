@@ -1,0 +1,121 @@
+---
+// About, Disclaimers & Feedback Section
+---
+
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="journal-card about-card">
+      <div class="section-heading-bar">
+        <div class="section-heading-left">
+          <span class="heading-accent-bar"></span>
+          <h2 class="section-main-title">关于本站与免责说明</h2>
+          <span class="section-sub-desc">致力于建立客观、严谨、不浮夸的机场品牌档案知识库</span>
+        </div>
+      </div>
+
+      <div class="about-content-grid">
+        <div class="about-col">
+          <h3 class="about-sub-h3">1. 本站定位与独立性声明</h3>
+          <p>
+            <strong>2027 机场日志（Airport Journal）</strong> 是一个专注于机场品牌资料、套餐结构、线路特征与使用指南的技术资讯博客。本站并非任何机场服务商的官方平台、直营机构或技术承运方。所有内容均旨在为网络使用者提供决策辅助与配置参考。
+          </p>
+
+          <h3 class="about-sub-h3" style="margin-top: 18px;">2. 资料来源与时效性风险</h3>
+          <p>
+            各品牌的套餐价格、节点数量、线路协议及流媒体解锁状况均提取自公开展示页、用户提供的购买入口、售后工单规则及历史快照记录（核实基准日：2026-11-23）。机场服务商在日常运营中可能会无预警调整套餐资费、下线节点或变更订阅规则，请用户在实际订购前务必以各品牌登录后的最终结算页为准。
+          </p>
+        </div>
+
+        <div class="about-col">
+          <h3 class="about-sub-h3">3. 推广链接与合作说明</h3>
+          <p>
+            为维持本站服务器托管与持续的数据维护成本，部分品牌资料中提供的“注册/购买入口”附带有推广分佣代码（Affiliate / Code）。此类链接均在技术代码中明确标注 <code>rel="sponsored noopener noreferrer"</code>，且不影响本站对品牌参数的如实呈现，我们绝不因推广属性而刻意抹去任何已知限制。
+          </p>
+
+          <h3 class="about-sub-h3" style="margin-top: 18px;">4. 纠错反馈与品牌澄清通道</h3>
+          <p>
+            若您是收录品牌的运营方或使用用户，发现任何套餐价格变动、线路下线、官网变更或描述不准确之处，欢迎通过以下渠道提交纠错，我们将在核验后及时更新：
+          </p>
+          <div class="contact-box">
+            <span class="contact-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <span>联系邮箱：<code>feedback@jichangrizhi.blog</code></span>
+            </span>
+            <span class="contact-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>风险异常报告入口：<a href="/airport-alerts/#dispute-channel" class="content-link">风险预警申诉通道</a></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    padding: 36px 0 48px 0;
+  }
+
+  .about-card {
+    padding: 36px;
+    background: #FFFFFF;
+  }
+
+  @media (max-width: 640px) {
+    .about-card {
+      padding: 24px 16px;
+    }
+  }
+
+  .about-content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+
+  @media (max-width: 860px) {
+    .about-content-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .about-sub-h3 {
+    font-size: 1.08rem;
+    font-weight: 800;
+    color: var(--color-title);
+    margin-bottom: 8px;
+  }
+
+  .about-col p {
+    font-size: 0.92rem;
+    color: var(--color-body);
+    line-height: 1.7;
+  }
+
+  .contact-box {
+    margin-top: 14px;
+    background: #F8FAFC;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.88rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-title);
+  }
+</style>

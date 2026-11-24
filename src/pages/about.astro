@@ -1,0 +1,323 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// SEO Metadata strictly per instruction
+const pageTitle = "关于机场日志｜Airport Journal 专业机场资讯与品牌资料博客";
+const pageH1 = "关于机场日志 Airport Journal";
+const pageDescription = "机场日志（Airport Journal）专注于客观整理机场品牌档案、套餐价格、线路协议与使用指南，坚持非官方独立立场与公开透明核验原则，提供可信赖的技术资讯。";
+const canonicalPath = "/about/";
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: '首页',
+      item: 'https://jichangrizhi.blog/'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: '关于本站',
+      item: 'https://jichangrizhi.blog/about/'
+    }
+  ]
+};
+
+const aboutSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: 'https://jichangrizhi.blog/about/'
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath={canonicalPath}
+  jsonLdSchema={[breadcrumbSchema, aboutSchema]}
+>
+  <div class="about-page-wrapper">
+    <!-- Breadcrumbs -->
+    <nav class="page-breadcrumbs container" aria-label="面包屑导航">
+      <ol class="breadcrumb-list">
+        <li><a href="/">首页</a></li>
+        <li class="separator">/</li>
+        <li aria-current="page">关于本站</li>
+      </ol>
+    </nav>
+
+    <!-- Header Banner -->
+    <header class="page-header-banner">
+      <div class="container">
+        <div class="banner-badge-wrap">
+          <span class="badge-tag blue">独立专业博客</span>
+          <span class="badge-tag success">客观公信 · 公开透明</span>
+        </div>
+        <h1 class="page-main-h1">{pageH1}</h1>
+        <p class="page-intro-desc">
+          专注于机场品牌深度档案、套餐价格、线路特征与实战使用指南的专业资讯博客。遵循纯静态预渲染技术标准，保障卓越的阅读体验与搜索引擎抓取性能。
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="container about-main-container">
+      <div class="about-grid">
+        <!-- 1. 品牌介绍与成立初衷 -->
+        <article class="journal-card about-block">
+          <h2 class="about-block-title">一、机场日志品牌介绍与建站目的</h2>
+          <p>
+            <strong>机场日志（Airport Journal）</strong> 创建于 2026 年，是一个专注于全球网络加速、机场品牌档案整理、套餐定价分析与全平台客户端实战指南的技术资讯博客。
+          </p>
+          <p>
+            在当今纷繁复杂的网络服务市场中，用户往往面临虚假低价宣传、虚标带宽、频繁跑路以及各类信息不对称的困境。我们建立本站的唯一目的，是<strong>为用户提供一份去浮夸化、具有可追溯记录与交叉核对支撑的客观参考数据库</strong>，让每一位网络工作者和学习者能够更高效、更安全地找到符合自身需求的连接服务。
+          </p>
+        </article>
+
+        <!-- 2. 资料整理原则与真实性承诺 -->
+        <article class="journal-card about-block">
+          <h2 class="about-block-title">二、资料整理原则与非虚构承诺</h2>
+          <p>
+            本站秉持以下四大核心采编原则，坚决拒绝黑箱操作与虚构评测：
+          </p>
+          <ul class="about-list">
+            <li><strong>真实核验原则：</strong>所有收录品牌的套餐价格、节点分布、支持协议与退款政策，均来自服务商公开控制台或官方文档，不虚构未提供的服务承诺。</li>
+            <li><strong>拒绝虚假测速：</strong>网络测速具有极强的时空与本地运营商差异。本站不生成无依据的「全绿虚假测速图」，仅客观陈述线路技术类型（IPLC 专线 / BGP 隧道 / 公网直连）及其网络物理属性。</li>
+            <li><strong>保留完整事实：</strong>对已收录的品牌档案，完整保留全部规格章节与表格，不为了迎合特定品牌而隐藏已知使用限制或售后退款条款。</li>
+            <li><strong>严谨时效标注：</strong>每份档案均明确标注信息核验基准日期（2026-11-23 至 2026-11-24），方便用户根据时间线判断资讯的时效性。</li>
+          </ul>
+        </article>
+
+        <!-- 3. 数据来源与信息核实方式 -->
+        <article class="journal-card about-block">
+          <h2 class="about-block-title">三、品牌资料来源与内容更新机制</h2>
+          <p>
+            机场日志收录的全部 18 家品牌资料源自以下渠道的严格交叉比对：
+          </p>
+          <ol class="about-ol">
+            <li>服务商公开发布的官方前端展示页与控制台套餐表格。</li>
+            <li>服务商官方 Telegram 频道 / 网站服务公告及《服务条款 (TOS)》。</li>
+            <li>第三方开源开发者技术社区（如 GitHub 跑路机场追踪项目）公开可复现的运行报告。</li>
+          </ol>
+          <p>
+            <strong>更新机制：</strong>技术编辑团队每月例行复核各品牌套餐资费与节点状态；当收到官方变动通知或用户纠错申请时，在核实后的 24~48 小时内完成档案页面的增补与修订。
+          </p>
+        </article>
+
+        <!-- 4. 推广链接与利益关系披露 -->
+        <article class="journal-card about-block">
+          <h2 class="about-block-title">四、推广链接（AFF）与商业利益关系披露</h2>
+          <p>
+            为支撑网站的服务器云托管、CDN 带宽加速与持续的编辑维护成本，本站部分品牌卡片和详情页中的「直达官网 / 注册入口」链接中，可能包含合作推广分佣代码（Affiliate / Referral Link）。
+          </p>
+          <p>
+            关于推广机制，我们向用户做出如下郑重公开承诺：
+          </p>
+          <ul class="about-list">
+            <li><strong>代码透明标记：</strong>所有包含推广属性的外部超链接，均严格遵循搜索引擎规范附加 <code>rel="sponsored noopener noreferrer"</code> 属性。</li>
+            <li><strong>不影响客观呈现：</strong>推广合作绝不作为品牌排序、评测打分或缺点屏蔽的交换条件。有严重运营风险的品牌即使提供高额分佣，亦会被如实录入风险预警专区。</li>
+            <li><strong>用户零额外成本：</strong>通过本站推荐链接访问购买，您所享受的套餐价格与官网完全一致，在有促销码时甚至能获得专属减免。</li>
+          </ul>
+        </article>
+
+        <!-- 5. 纠错与品牌方联系渠道 -->
+        <article class="journal-card about-block">
+          <h2 class="about-block-title">五、联系方式、内容纠错与品牌沟通渠道</h2>
+          <p>
+            如果您是收录品牌的运营团队成员，或日常使用该服务的资深用户，发现本站任何品牌资料中存在套餐调整、价格变动、官网迁移或描述偏差，欢迎随时与我们联系：
+          </p>
+          <div class="contact-card">
+            <div class="contact-row">
+              <span class="contact-label">编辑部官方邮箱：</span>
+              <a href="mailto:feedback@jichangrizhi.blog" class="contact-val">feedback@jichangrizhi.blog</a>
+            </div>
+            <div class="contact-row">
+              <span class="contact-label">风险预警申诉：</span>
+              <a href="/risk-alerts/" class="contact-val">风险预警专区澄清申请通道 →</a>
+            </div>
+            <div class="contact-row">
+              <span class="contact-label">响应时限承诺：</span>
+              <span class="contact-note">工作日通常在 24 小时内完成核验并回复处理结果。</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. 内容免责声明 -->
+        <article class="journal-card about-block">
+          <h2 class="about-block-title">六、网站法律与内容免责声明</h2>
+          <p class="disclaimer-p">
+            1. <strong>非官方运营方：</strong>本站为独立第三方资讯媒体，非任何被收录机场品牌的技术开发方、运营方或实际承运机构。用户与各机场服务商之间因购买套餐、退款争议、服务中断或资金损失产生的任何纠纷，应由交易双方依据各自服务协议处理，本站不承担连带法律责任。
+          </p>
+          <p class="disclaimer-p">
+            2. <strong>网络波动性免责：</strong>国际网络中继受到不可抗力、骨干光缆维护、国际出口审查策略调整等多重复杂因素影响。本站提供的指南与档案仅代表特定历史核对节点的客观状态，不构成对任何服务商未来持续连通率的绝对担保。
+          </p>
+          <p class="disclaimer-p">
+            3. <strong>合规使用准则：</strong>本站所有客户端教程与网络知识仅供计算机网络学术研究、跨境合法贸易、正版影音欣赏与软件开发测试用途。使用者应当严格遵守所在司法管辖区的各项法律法规，严禁利用网络代理工具从事任何违法违规活动。
+          </p>
+        </article>
+      </div>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-page-wrapper {
+    padding-bottom: 72px;
+  }
+
+  /* Breadcrumbs */
+  .page-breadcrumbs {
+    padding-top: 20px;
+    padding-bottom: 12px;
+  }
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .breadcrumb-list a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .breadcrumb-list a:hover {
+    color: var(--color-primary);
+  }
+  .breadcrumb-list .separator {
+    color: #BDC5D0;
+  }
+
+  /* Header Banner */
+  .page-header-banner {
+    padding: 32px 0 28px 0;
+    background: linear-gradient(180deg, rgba(235, 243, 255, 0.4) 0%, rgba(255, 255, 255, 0) 100%);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  }
+  .banner-badge-wrap {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .page-main-h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    margin-bottom: 14px;
+    line-height: 1.25;
+  }
+  .page-intro-desc {
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    max-width: 860px;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* Main Container */
+  .about-main-container {
+    padding-top: 36px;
+  }
+  .about-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  .about-block {
+    padding: 32px 36px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+  }
+  .about-block-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 16px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #F1F5F9;
+  }
+
+  .about-block p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #334155;
+    margin-bottom: 14px;
+  }
+  .about-block p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-list, .about-ol {
+    padding-left: 22px;
+    margin: 14px 0 16px 0;
+  }
+  .about-list li, .about-ol li {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #334155;
+    margin-bottom: 8px;
+  }
+
+  .contact-card {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .contact-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  .contact-label {
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+  .contact-val {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .contact-val:hover {
+    text-decoration: underline;
+  }
+  .contact-note {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+  }
+
+  .disclaimer-p {
+    font-size: 14px;
+    color: #64748B;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 768px) {
+    .page-main-h1 {
+      font-size: 24px;
+    }
+    .about-block {
+      padding: 24px 20px;
+    }
+  }
+</style>

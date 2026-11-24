@@ -1,0 +1,147 @@
+---
+// Practical Guide Section
+---
+
+<section class="guide-section" id="guide">
+  <div class="container">
+    <div class="section-heading-bar">
+      <div class="section-heading-left">
+        <span class="heading-accent-bar"></span>
+        <h2 class="section-main-title">机场选购与使用实战指南</h2>
+        <span class="section-sub-desc">客户端导入、线路评估、异常排查与资金安全原则</span>
+      </div>
+      <a href="#airports" class="section-more-link">
+        浏览品牌档案 <span>↑</span>
+      </a>
+    </div>
+
+    <div class="guide-cards-grid">
+      <div class="journal-card guide-card" id="guide-selection">
+        <div class="guide-icon-badge">01</div>
+        <h3 class="guide-card-title">选购核心原则：避开长周期陷阱</h3>
+        <p class="guide-card-text">
+          网络代理服务商受上游出口带宽、机房链路成本及各地区合规政策多重影响，服务具备天然的不确定性。
+        </p>
+        <ul class="guide-checklist">
+          <li><strong>优先选择月付：</strong> 首次使用强烈建议订购单月套餐，完成日常工作、夜间高峰时段的真实带宽与流媒体测试。</li>
+          <li><strong>备用双活策略：</strong> 关键业务、跨境电商或外贸沟通人群，切忌押宝单一服务商，建议保留两家不同出口的套餐以防断连。</li>
+          <li><strong>理性看待“不限速”：</strong> “不限速”通常代表套餐未在软件层加装限制，并不等于国际公网独享光纤，最终网速受制于物理拥塞。</li>
+        </ul>
+      </div>
+
+      <div class="journal-card guide-card" id="guide-clients">
+        <div class="guide-icon-badge">02</div>
+        <h3 class="guide-card-title">客户端与系统导入标准流程</h3>
+        <p class="guide-card-text">
+          不同系统平台的客户端配置通常遵循两种流派：定制一键客户端与开源通用内核客户端。
+        </p>
+        <ul class="guide-checklist">
+          <li><strong>官方一键客户端：</strong> 适用于 Windows、Android、macOS 用户。免除手动配置规则，登录账号即同步全部节点。</li>
+          <li><strong>iOS 平台方案：</strong> 可通过海外 Apple ID 下载平台指定的专属客户端（如 Nextin 等），或使用通用工具配合订阅导入。</li>
+          <li><strong>通用订阅导入：</strong> 复制订阅链接，在 Clash Verge、Shadowrocket 或 Sing-box 中粘贴并更新节点配置，开启分流模式。</li>
+        </ul>
+      </div>
+
+      <div class="journal-card guide-card" id="guide-troubleshoot">
+        <div class="guide-icon-badge">03</div>
+        <h3 class="guide-card-title">常见连接故障与三步排查法</h3>
+        <p class="guide-card-text">
+          遇到节点红字超时、无法打开网页或订阅获取失败时，建议按以下三步快速排查：
+        </p>
+        <ul class="guide-checklist">
+          <li><strong>第 1 步 检查配额与时间：</strong> 登录用户中心核对套餐是否到期、月度流量是否耗尽；检查本机系统时间是否与标准北京时间同步。</li>
+          <li><strong>第 2 步 切换节点与分流：</strong> 尝试将节点切换为同地区其他备用节点；检查代理模式是否误设为全局或直连。</li>
+          <li><strong>第 3 步 更新订阅与重启内核：</strong> 在客户端右键重新拉取最新订阅配置；如仍异常，可提交服务商工单附带报错日志。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .guide-section {
+    padding: 36px 0;
+  }
+
+  .guide-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .guide-cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .guide-card {
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .guide-icon-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    font-size: 0.95rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-family: var(--font-mono);
+  }
+
+  .guide-card-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--color-title);
+    line-height: 1.35;
+    margin-bottom: 12px;
+  }
+
+  .guide-card-text {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .guide-checklist {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--color-body);
+    border-top: 1px solid var(--color-border-light);
+    padding-top: 16px;
+    margin-top: auto;
+  }
+
+  .guide-checklist li {
+    position: relative;
+    padding-left: 18px;
+    line-height: 1.55;
+  }
+
+  .guide-checklist li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--color-primary);
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+
+  .guide-checklist strong {
+    color: var(--color-title);
+  }
+</style>

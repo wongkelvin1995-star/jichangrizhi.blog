@@ -1,0 +1,599 @@
+---
+import PersonalCenterLayout from '../../layouts/PersonalCenterLayout.astro';
+---
+
+<PersonalCenterLayout
+  title="个人概览 · 个人中心 MAX - 机场日志"
+  description="2027 机场日志个人空间概览，快捷查看收藏的机场、教程书签、近期足迹与套餐对比。"
+  activeTab="overview"
+  pageHeading="个人概览"
+>
+  <div class="overview-dashboard-wrapper">
+    <!-- Quick Action Greeting Bar -->
+    <div class="dashboard-greeting-box journal-card">
+      <div class="greeting-left">
+        <h2 class="greeting-h2">欢迎进入您的个人空间</h2>
+        <p class="greeting-desc">
+          在这里高效管理您关注的机场品牌、技术教程与对比清单。数据完全保存在本机，零注册、零追踪、零隐私泄露。
+        </p>
+      </div>
+      <div class="greeting-actions">
+        <a href="/airports/" class="btn-greeting-action primary">
+          <span>浏览 18 家机场档案</span>
+        </a>
+        <a href="/guides/" class="btn-greeting-action secondary">
+          <span>阅读客户端指南</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 2-Column Dashboard Grid -->
+    <div class="dashboard-grid-2col">
+      <!-- Left Column: Favorites & History -->
+      <div class="dash-col">
+        <!-- Recent Favorites Card -->
+        <section class="dash-section-card journal-card">
+          <div class="dash-card-header">
+            <div class="card-title-group">
+              <span class="card-title-accent"></span>
+              <h3 class="dash-card-title">机场品牌收藏</h3>
+              <span class="dash-count-badge" id="dashFavCountBadge">0</span>
+            </div>
+            <a href="/personal-center/favorites/" class="dash-more-link">查看全部 →</a>
+          </div>
+
+          <div class="dash-card-body" id="overviewFavoritesList">
+            <div class="dash-empty-state">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              <p>暂无收藏的机场品牌</p>
+              <a href="/airports/" class="dash-empty-btn">去档案库看看</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent History Card -->
+        <section class="dash-section-card journal-card">
+          <div class="dash-card-header">
+            <div class="card-title-group">
+              <span class="card-title-accent"></span>
+              <h3 class="dash-card-title">最近浏览足迹</h3>
+              <span class="dash-count-badge" id="dashHistCountBadge">0</span>
+            </div>
+            <a href="/personal-center/history/" class="dash-more-link">全部记录 →</a>
+          </div>
+
+          <div class="dash-card-body" id="overviewHistoryList">
+            <div class="dash-empty-state">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <p>暂无浏览历史记录</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Bookmarks, Comparison & Notifications -->
+      <div class="dash-col">
+        <!-- Recent Bookmarks Card -->
+        <section class="dash-section-card journal-card">
+          <div class="dash-card-header">
+            <div class="card-title-group">
+              <span class="card-title-accent"></span>
+              <h3 class="dash-card-title">教程文章收藏</h3>
+              <span class="dash-count-badge" id="dashBkmCountBadge">0</span>
+            </div>
+            <a href="/personal-center/bookmarks/" class="dash-more-link">查看全部 →</a>
+          </div>
+
+          <div class="dash-card-body" id="overviewBookmarksList">
+            <div class="dash-empty-state">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <p>暂无收藏的指南教程</p>
+              <a href="/guides/" class="dash-empty-btn">浏览使用指南</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Comparison Quick Card -->
+        <section class="dash-section-card journal-card">
+          <div class="dash-card-header">
+            <div class="card-title-group">
+              <span class="card-title-accent"></span>
+              <h3 class="dash-card-title">套餐横向对比</h3>
+              <span class="dash-count-badge" id="dashCompCountBadge">0</span>
+            </div>
+            <a href="/personal-center/compare/" class="dash-more-link">进入对比库 →</a>
+          </div>
+
+          <div class="dash-card-body" id="overviewComparisonList">
+            <div class="dash-empty-state">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 3 21 3 21 8"></polyline>
+                <line x1="4" y1="20" x2="21" y2="3"></line>
+                <polyline points="21 16 21 21 16 21"></polyline>
+                <line x1="15" y1="15" x2="21" y2="21"></line>
+                <line x1="4" y1="4" x2="9" y2="9"></line>
+              </svg>
+              <p>未勾选对比套餐（最多 4 款）</p>
+              <a href="/airports/" class="dash-empty-btn">去挑选套餐</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent Notifications Snippet -->
+        <section class="dash-section-card journal-card">
+          <div class="dash-card-header">
+            <div class="card-title-group">
+              <span class="card-title-accent"></span>
+              <h3 class="dash-card-title">最新更新通报</h3>
+            </div>
+            <a href="/personal-center/notifications/" class="dash-more-link">全部通知 →</a>
+          </div>
+
+          <div class="dash-card-body" id="overviewNotifsList">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</PersonalCenterLayout>
+
+<script>
+  import { UserStore } from '../../lib/user-store.ts';
+
+  function renderOverview() {
+    const favorites = UserStore.getFavorites();
+    const bookmarks = UserStore.getBookmarks();
+    const history = UserStore.getHistory();
+    const comparison = UserStore.getComparison();
+    const notifs = UserStore.getNotifications();
+
+    // 1. Favs
+    const favBadge = document.getElementById('dashFavCountBadge');
+    if (favBadge) favBadge.textContent = String(favorites.length);
+    const favBox = document.getElementById('overviewFavoritesList');
+    if (favBox) {
+      if (favorites.length === 0) {
+        favBox.innerHTML = `
+          <div class="dash-empty-state">
+            <p>暂无收藏的机场品牌</p>
+            <a href="/airports/" class="dash-empty-btn">去档案库看看</a>
+          </div>
+        `;
+      } else {
+        favBox.innerHTML = `
+          <div class="dash-items-stack">
+            ${favorites.slice(0, 3).map(f => `
+              <div class="dash-stack-item">
+                <div class="stack-left">
+                  <span class="stack-main-title">${f.name}</span>
+                  <span class="stack-sub-text">${f.tagline || f.lineTypes}</span>
+                </div>
+                <div class="stack-right">
+                  <span class="stack-price-pill">${f.minPrice} 起</span>
+                  <a href="${f.url}" class="stack-action-btn">查看</a>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    // 2. Bookmarks
+    const bkmBadge = document.getElementById('dashBkmCountBadge');
+    if (bkmBadge) bkmBadge.textContent = String(bookmarks.length);
+    const bkmBox = document.getElementById('overviewBookmarksList');
+    if (bkmBox) {
+      if (bookmarks.length === 0) {
+        bkmBox.innerHTML = `
+          <div class="dash-empty-state">
+            <p>暂无收藏的指南教程</p>
+            <a href="/guides/" class="dash-empty-btn">浏览使用指南</a>
+          </div>
+        `;
+      } else {
+        bkmBox.innerHTML = `
+          <div class="dash-items-stack">
+            ${bookmarks.slice(0, 3).map(b => `
+              <div class="dash-stack-item">
+                <div class="stack-left">
+                  <span class="stack-main-title">${b.title}</span>
+                  <span class="stack-sub-text">${b.category} · 约 ${b.readTime}</span>
+                </div>
+                <div class="stack-right">
+                  <a href="${b.url}" class="stack-action-btn">阅读</a>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    // 3. History
+    const histBadge = document.getElementById('dashHistCountBadge');
+    if (histBadge) histBadge.textContent = String(history.length);
+    const histBox = document.getElementById('overviewHistoryList');
+    if (histBox) {
+      if (history.length === 0) {
+        histBox.innerHTML = `
+          <div class="dash-empty-state">
+            <p>暂无浏览历史记录</p>
+          </div>
+        `;
+      } else {
+        histBox.innerHTML = `
+          <div class="dash-items-stack">
+            ${history.slice(0, 5).map(h => `
+              <a href="${h.url}" class="dash-stack-item link-item">
+                <div class="stack-left">
+                  <span class="type-pill ${h.type}">${h.typeName}</span>
+                  <span class="stack-main-title">${h.title}</span>
+                </div>
+                <span class="stack-arrow">→</span>
+              </a>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    // 4. Comparison
+    const compBadge = document.getElementById('dashCompCountBadge');
+    if (compBadge) compBadge.textContent = String(comparison.length);
+    const compBox = document.getElementById('overviewComparisonList');
+    if (compBox) {
+      if (comparison.length === 0) {
+        compBox.innerHTML = `
+          <div class="dash-empty-state">
+            <p>未勾选对比套餐（最多 4 款）</p>
+            <a href="/airports/" class="dash-empty-btn">去挑选套餐</a>
+          </div>
+        `;
+      } else {
+        compBox.innerHTML = `
+          <div class="dash-items-stack">
+            ${comparison.map(c => `
+              <div class="dash-stack-item">
+                <div class="stack-left">
+                  <span class="stack-main-title">${c.brandName} - ${c.planName}</span>
+                  <span class="stack-sub-text">${c.price} / ${c.cycle} · ${c.traffic}</span>
+                </div>
+                <div class="stack-right">
+                  <a href="/personal-center/compare/" class="stack-action-btn">对比</a>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    // 5. Notifications Snippet
+    const notifsBox = document.getElementById('overviewNotifsList');
+    if (notifsBox) {
+      const topNotifs = notifs.slice(0, 2);
+      notifsBox.innerHTML = `
+        <div class="dash-items-stack">
+          ${topNotifs.map(n => `
+            <a href="/personal-center/notifications/" class="dash-stack-item link-item">
+              <div class="stack-left">
+                <div class="notif-title-row">
+                  ${!n.read ? '<span class="unread-dot"></span>' : ''}
+                  <span class="stack-main-title notif">${n.title}</span>
+                </div>
+                <span class="stack-sub-text notif-desc">${n.content.slice(0, 48)}...</span>
+              </div>
+              <span class="notif-date">${n.date}</span>
+            </a>
+          `).join('')}
+        </div>
+      `;
+    }
+  }
+
+  renderOverview();
+  window.addEventListener('aj-user-store-updated', () => {
+    renderOverview();
+  });
+</script>
+
+<style>
+  .overview-dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Greeting Bar */
+  .dashboard-greeting-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+    flex-wrap: wrap;
+  }
+  .greeting-left {
+    max-width: 580px;
+  }
+  .greeting-h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0 0 6px 0;
+  }
+  .greeting-desc {
+    font-size: 13.5px;
+    color: #647B95;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .greeting-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-greeting-action {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-greeting-action.primary {
+    background: #2454ED;
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(36, 84, 237, 0.2);
+  }
+  .btn-greeting-action.primary:hover {
+    background: #173B9C;
+  }
+  .btn-greeting-action.secondary {
+    background: #F0F5FB;
+    color: #142B48;
+    border: 1px solid #DFE7F1;
+  }
+  .btn-greeting-action.secondary:hover {
+    background: #E2EBF5;
+  }
+
+  /* 2-Col Grid */
+  .dashboard-grid-2col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+  .dash-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .dash-section-card {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+  }
+  .dash-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F0F5FB;
+  }
+  .card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title-accent {
+    width: 3.5px;
+    height: 16px;
+    background: #2454ED;
+    border-radius: 2px;
+  }
+  .dash-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #142B48;
+    margin: 0;
+  }
+  .dash-count-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2454ED;
+    background: #E8F0FE;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+  .dash-more-link {
+    font-size: 12.5px;
+    color: #647B95;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s ease;
+  }
+  .dash-more-link:hover {
+    color: #2454ED;
+  }
+
+  /* Items Stack */
+  .dash-items-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .dash-stack-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    background: #F8FAFD;
+    border: 1px solid #EDF2F7;
+    border-radius: 10px;
+    transition: all 0.15s ease;
+  }
+  .dash-stack-item.link-item {
+    text-decoration: none;
+  }
+  .dash-stack-item.link-item:hover {
+    background: #F0F5FB;
+    border-color: #DFE7F1;
+  }
+  .stack-left {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .stack-main-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #142B48;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .stack-main-title.notif {
+    font-size: 13px;
+  }
+  .stack-sub-text {
+    font-size: 12px;
+    color: #647B95;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .notif-desc {
+    color: #8C9CAE;
+  }
+  .notif-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .unread-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #EF4444;
+    flex-shrink: 0;
+  }
+  .notif-date {
+    font-size: 11.5px;
+    color: #94A3B8;
+    white-space: nowrap;
+  }
+  .stack-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .stack-price-pill {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2454ED;
+  }
+  .stack-action-btn {
+    padding: 4px 10px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #142B48;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.15s ease;
+  }
+  .stack-action-btn:hover {
+    background: #2454ED;
+    border-color: #2454ED;
+    color: #FFFFFF;
+  }
+  .stack-arrow {
+    color: #94A3B8;
+    font-size: 14px;
+    transition: transform 0.15s ease;
+  }
+  .dash-stack-item.link-item:hover .stack-arrow {
+    transform: translateX(3px);
+    color: #2454ED;
+  }
+  .type-pill {
+    align-self: flex-start;
+    font-size: 10.5px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .type-pill.brand {
+    background: #E8F0FE;
+    color: #2454ED;
+  }
+  .type-pill.guide {
+    background: #DCFCE7;
+    color: #166534;
+  }
+  .type-pill.risk {
+    background: #FEE2E2;
+    color: #991B1B;
+  }
+
+  /* Empty State */
+  .dash-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    text-align: center;
+    gap: 8px;
+  }
+  .dash-empty-state p {
+    font-size: 13px;
+    color: #8C9CAE;
+    margin: 0;
+  }
+  .dash-empty-btn {
+    display: inline-flex;
+    padding: 5px 12px;
+    background: #F0F5FB;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #2454ED;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.15s ease;
+  }
+  .dash-empty-btn:hover {
+    background: #DFE7F1;
+  }
+
+  @media (max-width: 900px) {
+    .dashboard-grid-2col {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

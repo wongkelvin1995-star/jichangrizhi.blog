@@ -1,0 +1,511 @@
+---
+import PersonalCenterLayout from '../../layouts/PersonalCenterLayout.astro';
+---
+
+<PersonalCenterLayout
+  title="机场收藏 · 个人中心 MAX - 机场日志"
+  description="查看与管理您收藏的机场品牌，快速对比套餐资费、节点地区并直达官方控制台。"
+  activeTab="favorites"
+  pageHeading="机场收藏"
+>
+  <div class="personal-subpage-wrap">
+    <!-- Subpage Action Bar -->
+    <header class="subpage-header-card journal-card">
+      <div class="subpage-header-left">
+        <div class="title-with-count">
+          <h1 class="subpage-main-h1">已收藏的机场品牌</h1>
+          <span class="count-tag" id="favTotalCountTag">0</span>
+        </div>
+        <p class="subpage-desc">
+          汇集您重点关注的机场服务商，便于随时追踪套餐价格波动与节点升级动态。
+        </p>
+      </div>
+
+      <div class="subpage-header-controls">
+        <div class="search-mini-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#647B95" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="search"
+            id="favSearchInput"
+            class="mini-search-input"
+            placeholder="搜索收藏的品牌名称..."
+            aria-label="检索收藏的机场"
+          />
+        </div>
+
+        <select id="favSortSelect" class="sort-select" aria-label="收藏排序方式">
+          <option value="time-desc">最新收藏优先</option>
+          <option value="time-asc">最早收藏优先</option>
+          <option value="name">品牌名称排序</option>
+        </select>
+      </div>
+    </header>
+
+    <!-- Favorites Grid Container -->
+    <main class="favorites-grid-wrap" id="favoritesGrid">
+      <!-- Rendered dynamically via JS -->
+    </main>
+
+    <!-- Empty State Placeholder (hidden by default) -->
+    <div id="favoritesEmptyState" class="empty-state-box journal-card" style="display: none;">
+      <div class="empty-icon-circle">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2454ED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </div>
+      <h2 class="empty-title">您尚未收藏任何机场品牌</h2>
+      <p class="empty-desc">
+        在机场档案大全或任一品牌评测页面，点击「收藏」按钮即可将心仪品牌加入此列表，数据保存在本机浏览器中。
+      </p>
+      <div class="empty-actions">
+        <a href="/airports/" class="btn-empty-primary">
+          <span>前往 2027 机场档案库</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</PersonalCenterLayout>
+
+<script>
+  import { UserStore, type FavoriteBrand } from '../../lib/user-store.ts';
+
+  const grid = document.getElementById('favoritesGrid');
+  const emptyBox = document.getElementById('favoritesEmptyState');
+  const countTag = document.getElementById('favTotalCountTag');
+  const searchInput = document.getElementById('favSearchInput') as HTMLInputElement | null;
+  const sortSelect = document.getElementById('favSortSelect') as HTMLSelectElement | null;
+
+  let searchTerm = '';
+  let sortBy = 'time-desc';
+
+  function renderFavorites() {
+    const list = UserStore.getFavorites();
+    if (countTag) countTag.textContent = String(list.length);
+
+    if (list.length === 0) {
+      if (grid) grid.innerHTML = '';
+      if (emptyBox) emptyBox.style.display = 'flex';
+      return;
+    }
+
+    if (emptyBox) emptyBox.style.display = 'none';
+
+    // Filter
+    let filtered = list.filter(b => {
+      if (!searchTerm) return true;
+      const s = searchTerm.toLowerCase();
+      return b.name.toLowerCase().includes(s) || (b.englishName && b.englishName.toLowerCase().includes(s));
+    });
+
+    // Sort
+    filtered.sort((a, b) => {
+      if (sortBy === 'time-desc') return b.addedAt - a.addedAt;
+      if (sortBy === 'time-asc') return a.addedAt - b.addedAt;
+      if (sortBy === 'name') return a.name.localeCompare(b.name, 'zh');
+      return 0;
+    });
+
+    if (filtered.length === 0) {
+      if (grid) {
+        grid.innerHTML = `
+          <div class="journal-card" style="grid-column: 1 / -1; padding: 36px; text-align: center; color: #647B95;">
+            未找到包含「${searchTerm}」的收藏品牌，请尝试其它关键词。
+          </div>
+        `;
+      }
+      return;
+    }
+
+    if (grid) {
+      grid.innerHTML = filtered.map(b => {
+        const addedDate = new Date(b.addedAt).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+        return `
+          <article class="journal-card fav-brand-card">
+            <div class="card-top-row">
+              <div class="brand-avatar-mini">${b.name.slice(0, 1)}</div>
+              <div class="brand-name-info">
+                <div class="name-line">
+                  <h3 class="brand-title">${b.name}</h3>
+                  ${b.englishName ? `<span class="en-name">${b.englishName}</span>` : ''}
+                </div>
+                <span class="fav-date">收藏于 ${addedDate}</span>
+              </div>
+              <button
+                type="button"
+                class="btn-remove-fav"
+                data-brand-id="${b.brandId}"
+                title="取消收藏"
+                aria-label="取消收藏 ${b.name}"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            <p class="brand-tagline">${b.tagline || '优质网络专线接入服务'}</p>
+
+            <div class="brand-meta-pills">
+              <span class="meta-pill">线路：${b.lineTypes || '多线BGP'}</span>
+              <span class="meta-pill">协议：${b.protocols || '通用协议'}</span>
+            </div>
+
+            <div class="card-footer-row">
+              <div class="price-col">
+                <span class="price-label">起步价</span>
+                <span class="price-val">${b.minPrice || '15元'}</span>
+              </div>
+              <div class="btn-group">
+                <a href="${b.url}" class="btn-card-action detail">查看档案</a>
+                <a href="${b.url}#compare-plans" class="btn-card-action compare">加入对比</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // Bind remove buttons
+      grid.querySelectorAll('.btn-remove-fav').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const bId = (btn as HTMLElement).dataset.brandId!;
+          UserStore.removeFavoriteBrand(bId);
+          renderFavorites();
+        });
+      });
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      searchTerm = searchInput.value.trim();
+      renderFavorites();
+    });
+  }
+
+  if (sortSelect) {
+    sortSelect.addEventListener('change', () => {
+      sortBy = sortSelect.value;
+      renderFavorites();
+    });
+  }
+
+  renderFavorites();
+  window.addEventListener('aj-user-store-updated', () => {
+    renderFavorites();
+  });
+</script>
+
+<style>
+  .personal-subpage-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Subpage Header Card */
+  .subpage-header-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+    flex-wrap: wrap;
+  }
+  .subpage-header-left {
+    max-width: 500px;
+  }
+  .title-with-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .subpage-main-h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0;
+  }
+  .count-tag {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2454ED;
+    background: #E8F0FE;
+    padding: 2px 9px;
+    border-radius: 12px;
+  }
+  .subpage-desc {
+    font-size: 13.5px;
+    color: #647B95;
+    margin: 0;
+  }
+
+  .subpage-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .search-mini-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .search-mini-box svg {
+    position: absolute;
+    left: 12px;
+    pointer-events: none;
+  }
+  .mini-search-input {
+    width: 220px;
+    height: 38px;
+    padding-left: 36px;
+    padding-right: 12px;
+    background: #F8FAFD;
+    border: 1px solid #DFE7F1;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #142B48;
+    transition: all 0.2s ease;
+  }
+  .mini-search-input:focus {
+    outline: none;
+    background: #FFFFFF;
+    border-color: #2454ED;
+    box-shadow: 0 0 0 3px rgba(36, 84, 237, 0.1);
+  }
+  .sort-select {
+    height: 38px;
+    padding: 0 12px;
+    background: #F8FAFD;
+    border: 1px solid #DFE7F1;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #142B48;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* Grid */
+  .favorites-grid-wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .fav-brand-card {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+    transition: all 0.2s ease;
+  }
+  .fav-brand-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(36, 84, 237, 0.08);
+    border-color: #CBD5E1;
+  }
+  .card-top-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-avatar-mini {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2454ED 0%, #173B9C 100%);
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .brand-name-info {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .name-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .brand-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0;
+  }
+  .en-name {
+    font-size: 12.5px;
+    color: #2454ED;
+    font-weight: 600;
+  }
+  .fav-date {
+    font-size: 11.5px;
+    color: #94A3B8;
+  }
+  .btn-remove-fav {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #F8FAFD;
+    border: 1px solid #EDF2F7;
+    color: #94A3B8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-remove-fav:hover {
+    background: #FEE2E2;
+    border-color: #FECDD3;
+    color: #EF4444;
+  }
+
+  .brand-tagline {
+    font-size: 13px;
+    color: #647B95;
+    margin: 0;
+    line-height: 1.5;
+  }
+  .brand-meta-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    font-size: 11px;
+    color: #647B95;
+    background: #F0F5FB;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  .card-footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #F0F5FB;
+  }
+  .price-col {
+    display: flex;
+    flex-direction: column;
+  }
+  .price-label {
+    font-size: 11px;
+    color: #94A3B8;
+  }
+  .price-val {
+    font-size: 15px;
+    font-weight: 800;
+    color: #2454ED;
+  }
+  .btn-group {
+    display: flex;
+    gap: 8px;
+  }
+  .btn-card-action {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-card-action.detail {
+    background: #2454ED;
+    color: #FFFFFF;
+  }
+  .btn-card-action.detail:hover {
+    background: #173B9C;
+  }
+  .btn-card-action.compare {
+    background: #F0F5FB;
+    color: #142B48;
+    border: 1px solid #DFE7F1;
+  }
+  .btn-card-action.compare:hover {
+    background: #E2EBF5;
+    color: #2454ED;
+  }
+
+  /* Empty State */
+  .empty-state-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 56px 24px;
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+  }
+  .empty-icon-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #EFF6FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .empty-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0 0 8px 0;
+  }
+  .empty-desc {
+    font-size: 14px;
+    color: #647B95;
+    max-width: 480px;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+  }
+  .btn-empty-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #2454ED;
+    color: #FFFFFF;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 12px rgba(36, 84, 237, 0.25);
+  }
+  .btn-empty-primary:hover {
+    background: #173B9C;
+    transform: translateY(-1px);
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AboutSection from '../components/AboutSection.astro';
+
+const pageTitle = "关于本站与免责说明 - 2027 机场日志";
+const pageDescription = "了解 2027 机场日志的建站初衷、数据核验机制、推广链接合规说明、纠错与品牌方联系渠道。";
+
+const aboutSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: 'https://jichangrizhi.blog/about/'
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/about/"
+  jsonLdSchema={[aboutSchema]}
+>
+  <div class="about-page-wrapper">
+    <!-- Header Banner -->
+    <section class="page-intro-banner">
+      <div class="container">
+        <div class="banner-badge-wrap">
+          <span class="badge-tag blue">独立知识库</span>
+          <span class="badge-tag success">客观公信</span>
+        </div>
+        <h1 class="page-main-h1">关于 2027 机场日志</h1>
+        <p class="page-intro-desc">
+          致力于建立客观、透明、严谨的机场品牌档案与选购参考体系。拒绝浮夸虚假营销，所有数据均依托真实公开资料交叉核验。
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="about-main-container">
+      <AboutSection />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-page-wrapper {
+    padding-bottom: 60px;
+  }
+
+  .page-intro-banner {
+    background: linear-gradient(180deg, #F0F6FF 0%, #F7FAFF 100%);
+    border-bottom: 1px solid var(--color-border);
+    padding: 48px 0 36px 0;
+  }
+
+  .banner-badge-wrap {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .page-main-h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--color-title);
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .page-main-h1 {
+      font-size: 1.75rem;
+    }
+  }
+
+  .page-intro-desc {
+    font-size: 1.05rem;
+    color: var(--color-muted);
+    max-width: 820px;
+    line-height: 1.7;
+  }
+</style>

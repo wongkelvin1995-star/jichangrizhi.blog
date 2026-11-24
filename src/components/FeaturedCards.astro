@@ -1,0 +1,197 @@
+---
+// Featured 3 Cards - faithful to Airport Journal MAX reference layout
+const cards = [
+  {
+    tag: '机场档案',
+    tagColor: 'blue',
+    title: '主流机场品牌盘点：特色、定位与适用人群',
+    desc: '梳理当前主流机场的品牌特点、线路风格与适用场景，帮助你快速找到合适的服务。',
+    date: '2026-11-23',
+    link: '#lingdongyun',
+    image: '/images/card-airplane.webp',
+    gradient: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)',
+    icon: 'airplane'
+  },
+  {
+    tag: '套餐信息',
+    tagColor: 'blue',
+    title: '机场套餐如何选择？价格、流量与性价比全解析',
+    desc: '从套餐结构、流量策略、价格区间到适用场景，全面解析如何选择高性价比的机场套餐。',
+    date: '2026-11-23',
+    link: '#muguang',
+    image: '/images/card-terminal.webp',
+    gradient: 'linear-gradient(135deg, #0F766E 0%, #14B8A6 100%)',
+    icon: 'package'
+  },
+  {
+    tag: '节点地区',
+    tagColor: 'blue',
+    title: '机场节点地区详解：常见地区、延迟表现与使用建议',
+    desc: '系统介绍常见的节点地区分布、网络特点与使用建议，帮助你根据需求选择合适的线路。',
+    date: '2026-11-23',
+    link: '#weifeng',
+    image: '/images/card-globe.webp',
+    gradient: 'linear-gradient(135deg, #312E81 0%, #6366F1 100%)',
+    icon: 'globe'
+  }
+];
+---
+
+<section class="featured-section" id="featured">
+  <div class="container">
+    <div class="section-heading-bar">
+      <div class="section-heading-left">
+        <span class="heading-accent-bar"></span>
+        <h2 class="section-main-title">精选导航</h2>
+        <span class="section-sub-desc">来自机场日志的深度内容：品牌解析、套餐对比、节点地区与实用技巧。</span>
+      </div>
+      <a href="#airports" class="section-more-link">
+        查看全部档案 <span>→</span>
+      </a>
+    </div>
+
+    <div class="featured-grid">
+      {cards.map(c => (
+        <a href={c.link} class="journal-card featured-card" aria-label={`查看 ${c.title}`}>
+          <div class="card-thumb">
+            {c.image ? (
+              <img src={c.image} alt={c.title} class="thumb-photo-img" loading="lazy" />
+            ) : (
+              <div class="thumb-fallback-gradient" style={`background: ${c.gradient}`}></div>
+            )}
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="badge-tag blue">{c.tag}</span>
+            </div>
+            <h3 class="card-title">{c.title}</h3>
+            <p class="card-desc">{c.desc}</p>
+            <div class="card-footer">
+              <span class="card-date">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                {c.date}
+              </span>
+              <span class="card-arrow-icon">→</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured-section {
+    padding: 48px 0;
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .featured-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .featured-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .featured-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+
+  .card-thumb {
+    height: 168px;
+    position: relative;
+    overflow: hidden;
+    background: #E2E8F0;
+  }
+
+  .thumb-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .featured-card:hover .thumb-photo-img {
+    transform: scale(1.05);
+  }
+
+  .thumb-fallback-gradient {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .card-meta {
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: var(--color-title);
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+
+  .card-desc {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .card-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--color-light-muted);
+  }
+
+  .card-arrow-icon {
+    font-size: 1rem;
+    color: var(--color-primary);
+    font-weight: 700;
+    transition: transform 0.2s ease;
+  }
+
+  .featured-card:hover .card-arrow-icon {
+    transform: translateX(4px);
+  }
+</style>

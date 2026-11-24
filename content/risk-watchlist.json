@@ -1,0 +1,54 @@
+[
+  {
+    "id": "fccloud",
+    "name": "FCCloud",
+    "reportDate": "2025-02-10",
+    "category": "历史社区停运报告",
+    "categoryBadge": "history-shutdown",
+    "symptoms": "2025-02-10 起有用户在开源社区报告节点全面不可用、工单未获回复；社区标签标为“基本确认停止运营/失联”。此记录仅代表社区反馈与用户观察，非服务商官方发布的清算公告。",
+    "sourceUrl": "https://github.com/limbopro/Paolujichang/issues/77",
+    "sourceName": "Paolujichang 社区 Issue #77",
+    "lastVerifiedDate": "2026-11-23",
+    "status": "社区标记失联",
+    "notes": "建议持有该平台有效账号的用户停止充值，并保留付款凭据备查。"
+  },
+  {
+    "id": "aca",
+    "name": "ACA",
+    "reportDate": "2025-01-14",
+    "category": "历史社区停运报告",
+    "categoryBadge": "history-shutdown",
+    "symptoms": "2025-01-14 公开风险报告及多位用户反馈客服联系失败，节点持续失联；社区状态标签为“基本确认停止运营/失联”。本站未获官方直接停运声明，作为历史风险记录予以收录。",
+    "sourceUrl": "https://github.com/limbopro/Paolujichang/issues/68",
+    "sourceName": "Paolujichang 社区 Issue #68",
+    "lastVerifiedDate": "2026-11-23",
+    "status": "社区标记失联",
+    "notes": "历史风险案例，警示跨周期年付订购需注重服务商持续履约能力。"
+  },
+  {
+    "id": "suibian",
+    "name": "随便云（SuiBian）",
+    "reportDate": "2026-11-02",
+    "category": "服务异常观察中",
+    "categoryBadge": "observing",
+    "symptoms": "2026-11-02 用户公开反馈部分节点经历长时间不可用及工单回复延迟；开源社区将其标记为“观察中”。尚未有官方定论，不可直接断言为永久停止运营，需持续追踪节点恢复状态。",
+    "sourceUrl": "https://github.com/limbopro/Paolujichang/issues/372",
+    "sourceName": "Paolujichang 社区 Issue #372",
+    "lastVerifiedDate": "2026-11-23",
+    "status": "持续观察中",
+    "notes": "网络偶发故障或上游线路检修亦可能导致短期不可用，敬请保持理性观察。"
+  },
+  {
+    "id": "hongye",
+    "name": "红叶机场",
+    "reportDate": "2026-11-22",
+    "category": "服务异常观察中",
+    "categoryBadge": "observing",
+    "symptoms": "2026-11-22 用户在社区提出节点异常、无法连接且暂时未能联络到服务方的报告；社区状态目前保持在“观察中”，不能草率判定为跑路，保留核实与澄清通道。",
+    "sourceUrl": "https://github.com/limbopro/Paolujichang/issues/397",
+    "sourceName": "Paolujichang 社区 Issue #397",
+    "lastVerifiedDate": "2026-11-23",
+    "status": "持续观察中",
+    "notes": "由于报告提出时间较短，建议关注官方群组或工单最新公告，切勿轻信未经证实的谣传。"
+  }
+]

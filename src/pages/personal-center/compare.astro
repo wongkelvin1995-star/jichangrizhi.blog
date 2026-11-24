@@ -1,0 +1,610 @@
+---
+import PersonalCenterLayout from '../../layouts/PersonalCenterLayout.astro';
+---
+
+<PersonalCenterLayout
+  title="套餐对比 · 个人中心 MAX - 机场日志"
+  description="多品牌机场套餐参数横向对比矩阵，支持 2~4 款套餐比对价格、周期、流量、专线架构、速率限制与客户端支持。"
+  activeTab="compare"
+  pageHeading="套餐对比"
+>
+  <div class="personal-subpage-wrap">
+    <!-- Subpage Action Bar -->
+    <header class="subpage-header-card journal-card">
+      <div class="subpage-header-left">
+        <div class="title-with-count">
+          <h1 class="subpage-main-h1">套餐横向对比矩阵</h1>
+          <span class="count-tag" id="compTotalCountTag">0 / 4</span>
+        </div>
+        <p class="subpage-desc">
+          支持同时选择 2 至 4 个机场套餐进行多维度深度对比，助您精准评估性价比与线路技术差异。
+        </p>
+      </div>
+
+      <div class="subpage-header-controls">
+        <button type="button" id="btnClearComparison" class="btn-clear-danger" title="清空对比栏">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>清空对比</span>
+        </button>
+        <a href="/airports/" class="btn-add-more-plans">
+          <span>+ 去品牌档案添加套餐</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Comparison Matrix Table Area -->
+    <main class="compare-matrix-wrap" id="compareMatrixArea">
+      <!-- Rendered dynamically via JS -->
+    </main>
+
+    <!-- Empty / Less than 2 State with Quick Presets -->
+    <div id="compareEmptyState" class="empty-state-box journal-card" style="display: none;">
+      <div class="empty-icon-circle">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2454ED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 3 21 3 21 8"></polyline>
+          <line x1="4" y1="20" x2="21" y2="3"></line>
+          <polyline points="21 16 21 21 16 21"></polyline>
+          <line x1="15" y1="15" x2="21" y2="21"></line>
+          <line x1="4" y1="4" x2="9" y2="9"></line>
+        </svg>
+      </div>
+      <h2 class="empty-title">至少需要添加 2 个套餐进行横向对比</h2>
+      <p class="empty-desc">
+        在任一机场品牌的档案详情页中，点击套餐列表右侧的「加入对比」即可勾选对比项（最多支持 4 款）。
+      </p>
+
+      <!-- Preset Quick Suggestions -->
+      <div class="preset-suggestions-box">
+        <span class="preset-label">💡 快速加入热门套餐体验对比：</span>
+        <div class="preset-buttons-row">
+          <button
+            type="button"
+            class="btn-quick-add-preset"
+            data-id="lingdongyun-0"
+            data-brand-id="lingdongyun"
+            data-brand-name="灵动云"
+            data-plan-name="入门轻量版"
+            data-price="15.00元"
+            data-cycle="月付"
+            data-traffic="100GB/月"
+            data-devices="3 台设备"
+            data-speed-limit="300Mbps"
+            data-line-types="IEPL 国际专线"
+            data-node-regions="香港、台湾、日本、新加坡、美国"
+            data-protocols="Shadowsocks / Trojan"
+            data-clients="Clash / Surge / 小火箭 / v2rayN"
+            data-aff-url="/airports/lingdongyun/"
+          >
+            + 灵动云 入门版 (15元/月)
+          </button>
+
+          <button
+            type="button"
+            class="btn-quick-add-preset"
+            data-id="dalaoyun-0"
+            data-brand-id="dalaoyun"
+            data-brand-name="大佬云"
+            data-plan-name="基础套餐"
+            data-price="15.00元"
+            data-cycle="月付"
+            data-traffic="100GB/月"
+            data-devices="不限设备"
+            data-speed-limit="300Mbps"
+            data-line-types="优质 BGP 中转网络"
+            data-node-regions="港/台/日/新/美/韩等"
+            data-protocols="Vmess / Trojan"
+            data-clients="全平台通用客户端"
+            data-aff-url="/airports/dalaoyun/"
+          >
+            + 大佬云 基础版 (15元/月)
+          </button>
+
+          <button
+            type="button"
+            class="btn-quick-add-preset"
+            data-id="weifeng-0"
+            data-brand-id="weifeng"
+            data-brand-name="微风网络"
+            data-plan-name="标准型套餐"
+            data-price="20.00元"
+            data-cycle="月付"
+            data-traffic="200GB/月"
+            data-devices="5 台设备"
+            data-speed-limit="500Mbps"
+            data-line-types="全中继专线 BGP"
+            data-node-regions="亚太主流地区全覆盖"
+            data-protocols="Shadowsocks / Hysteria2"
+            data-clients="Clash Meta / 小火箭"
+            data-aff-url="/airports/weifeng/"
+          >
+            + 微风网络 标准型 (20元/月)
+          </button>
+        </div>
+      </div>
+
+      <div class="empty-actions" style="margin-top: 20px;">
+        <a href="/airports/" class="btn-empty-primary">
+          <span>前往品牌档案库挑选</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</PersonalCenterLayout>
+
+<script>
+  import { UserStore, type ComparisonPlan } from '../../lib/user-store.ts';
+
+  const matrixArea = document.getElementById('compareMatrixArea');
+  const emptyBox = document.getElementById('compareEmptyState');
+  const countTag = document.getElementById('compTotalCountTag');
+  const clearBtn = document.getElementById('btnClearComparison');
+
+  function renderMatrix() {
+    const list = UserStore.getComparison();
+    if (countTag) countTag.textContent = `${list.length} / 4`;
+
+    if (list.length < 2) {
+      if (matrixArea) matrixArea.style.display = 'none';
+      if (emptyBox) emptyBox.style.display = 'flex';
+      return;
+    }
+
+    if (emptyBox) emptyBox.style.display = 'none';
+    if (matrixArea) {
+      matrixArea.style.display = 'block';
+
+      // Build Comparison Table HTML
+      matrixArea.innerHTML = `
+        <div class="journal-card matrix-card">
+          <div class="matrix-table-scroll">
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th class="matrix-corner-th">对比指标</th>
+                  ${list.map(p => `
+                    <th class="plan-th-col">
+                      <div class="th-content-box">
+                        <button type="button" class="btn-remove-plan-col" data-id="${p.id}" title="移出对比">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                        </button>
+                        <span class="th-brand-tag">${p.brandName}</span>
+                        <h3 class="th-plan-name">${p.planName}</h3>
+                        <div class="th-price-box">
+                          <span class="th-price">${p.price}</span>
+                          <span class="th-cycle">/ ${p.cycle}</span>
+                        </div>
+                        <a href="${p.affUrl}" class="btn-th-buy">直达品牌档案</a>
+                      </div>
+                    </th>
+                  `).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="metric-label-td">套餐月流量额度</td>
+                  ${list.map(p => `<td class="metric-val-td highlight-val">${p.traffic || '详见官网'}</td>`).join('')}
+                </tr>
+                <tr>
+                  <td class="metric-label-td">同时在线设备数</td>
+                  ${list.map(p => `<td class="metric-val-td">${p.devices || '详见官网'}</td>`).join('')}
+                </tr>
+                <tr>
+                  <td class="metric-label-td">速率峰值限制</td>
+                  ${list.map(p => `<td class="metric-val-td">${p.speedLimit || '高速无硬性限速'}</td>`).join('')}
+                </tr>
+                <tr>
+                  <td class="metric-label-td">线路技术架构</td>
+                  ${list.map(p => `<td class="metric-val-td primary-bold">${p.lineTypes || '多线中转'}</td>`).join('')}
+                </tr>
+                <tr>
+                  <td class="metric-label-td">节点覆盖地区</td>
+                  ${list.map(p => `<td class="metric-val-td text-small">${p.nodeRegions || '主流亚太/欧美'}</td>`).join('')}
+                </tr>
+                <tr>
+                  <td class="metric-label-td">网络协议类型</td>
+                  ${list.map(p => `<td class="metric-val-td code-pill-wrap"><span class="code-pill">${p.protocols || '通用协议'}</span></td>`).join('')}
+                </tr>
+                <tr>
+                  <td class="metric-label-td">客户端兼容性</td>
+                  ${list.map(p => `<td class="metric-val-td">${p.clients || '全平台通用'}</td>`).join('')}
+                </tr>
+                <tr>
+                  <td class="metric-label-td">流媒体 / AI 访问</td>
+                  ${list.map(() => `<td class="metric-val-td check-ok"><span class="check-icon">✓</span> 完整支持</td>`).join('')}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      // Bind remove single plan buttons
+      matrixArea.querySelectorAll('.btn-remove-plan-col').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pId = (btn as HTMLElement).dataset.id!;
+          UserStore.removeComparisonPlan(pId);
+          renderMatrix();
+        });
+      });
+    }
+  }
+
+  // Quick Preset Add Buttons
+  document.querySelectorAll('.btn-quick-add-preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const el = btn as HTMLElement;
+      UserStore.toggleComparisonPlan({
+        id: el.dataset.id!,
+        brandId: el.dataset.brandId!,
+        brandName: el.dataset.brandName!,
+        planName: el.dataset.planName!,
+        price: el.dataset.price!,
+        cycle: el.dataset.cycle!,
+        traffic: el.dataset.traffic!,
+        devices: el.dataset.devices!,
+        speedLimit: el.dataset.speedLimit!,
+        lineTypes: el.dataset.lineTypes!,
+        nodeRegions: el.dataset.nodeRegions!,
+        protocols: el.dataset.protocols!,
+        clients: el.dataset.clients!,
+        affUrl: el.dataset.affUrl!
+      });
+      renderMatrix();
+    });
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      UserStore.clearComparison();
+      renderMatrix();
+    });
+  }
+
+  renderMatrix();
+  window.addEventListener('aj-user-store-updated', () => {
+    renderMatrix();
+  });
+</script>
+
+<style>
+  .personal-subpage-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Subpage Header Card */
+  .subpage-header-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+    flex-wrap: wrap;
+  }
+  .subpage-header-left {
+    max-width: 500px;
+  }
+  .title-with-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .subpage-main-h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0;
+  }
+  .count-tag {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2454ED;
+    background: #E8F0FE;
+    padding: 2px 9px;
+    border-radius: 12px;
+  }
+  .subpage-desc {
+    font-size: 13.5px;
+    color: #647B95;
+    margin: 0;
+  }
+
+  .subpage-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-clear-danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: #FFF1F2;
+    border: 1px solid #FECDD3;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #E11D48;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-clear-danger:hover {
+    background: #FFE4E6;
+  }
+  .btn-add-more-plans {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 16px;
+    background: #2454ED;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .btn-add-more-plans:hover {
+    background: #173B9C;
+  }
+
+  /* Matrix Table */
+  .matrix-card {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 18px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(20, 43, 72, 0.05);
+  }
+  .matrix-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .matrix-corner-th {
+    width: 160px;
+    padding: 20px 24px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #647B95;
+    background: #F8FAFD;
+    border-bottom: 2px solid #DFE7F1;
+    border-right: 1px solid #DFE7F1;
+  }
+  .plan-th-col {
+    min-width: 200px;
+    padding: 24px 20px;
+    border-bottom: 2px solid #DFE7F1;
+    border-right: 1px solid #EDF2F7;
+    background: #FFFFFF;
+    vertical-align: top;
+  }
+  .th-content-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn-remove-plan-col {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #F1F5F9;
+    border: 1px solid #CBD5E1;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-remove-plan-col:hover {
+    background: #FEE2E2;
+    border-color: #FECDD3;
+    color: #EF4444;
+  }
+  .th-brand-tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #2454ED;
+    background: #E8F0FE;
+    padding: 2px 8px;
+    border-radius: 6px;
+    align-self: flex-start;
+  }
+  .th-plan-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0;
+  }
+  .th-price-box {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .th-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: #2454ED;
+  }
+  .th-cycle {
+    font-size: 12px;
+    color: #647B95;
+  }
+  .btn-th-buy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    background: #F0F5FB;
+    color: #142B48;
+    border: 1px solid #DFE7F1;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 6px;
+    transition: all 0.15s ease;
+  }
+  .btn-th-buy:hover {
+    background: #2454ED;
+    border-color: #2454ED;
+    color: #FFFFFF;
+  }
+
+  .metric-label-td {
+    padding: 16px 24px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #647B95;
+    background: #F8FAFD;
+    border-bottom: 1px solid #F0F5FB;
+    border-right: 1px solid #DFE7F1;
+  }
+  .metric-val-td {
+    padding: 16px 20px;
+    font-size: 13.5px;
+    color: #142B48;
+    border-bottom: 1px solid #F0F5FB;
+    border-right: 1px solid #EDF2F7;
+  }
+  .metric-val-td.highlight-val {
+    font-weight: 700;
+    color: #2454ED;
+  }
+  .metric-val-td.primary-bold {
+    font-weight: 600;
+    color: #173B9C;
+  }
+  .metric-val-td.text-small {
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .code-pill {
+    font-family: monospace;
+    font-size: 11.5px;
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #334155;
+  }
+  .check-ok {
+    color: #16A34A;
+    font-weight: 600;
+  }
+  .check-icon {
+    font-weight: 800;
+    margin-right: 2px;
+  }
+
+  /* Empty State */
+  .empty-state-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 56px 24px;
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+  }
+  .empty-icon-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #EFF6FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .empty-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0 0 8px 0;
+  }
+  .empty-desc {
+    font-size: 14px;
+    color: #647B95;
+    max-width: 480px;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+  }
+  .btn-empty-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #2454ED;
+    color: #FFFFFF;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 12px rgba(36, 84, 237, 0.25);
+  }
+  .btn-empty-primary:hover {
+    background: #173B9C;
+    transform: translateY(-1px);
+  }
+
+  /* Preset Quick Suggestions */
+  .preset-suggestions-box {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+  .preset-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #647B95;
+  }
+  .preset-buttons-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn-quick-add-preset {
+    padding: 8px 14px;
+    background: #F0F5FB;
+    border: 1px solid #DFE7F1;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #2454ED;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-quick-add-preset:hover {
+    background: #E2EBF5;
+    border-color: #2454ED;
+  }
+</style>

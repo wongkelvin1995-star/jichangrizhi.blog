@@ -1,0 +1,667 @@
+---
+import PersonalCenterLayout from '../../layouts/PersonalCenterLayout.astro';
+---
+
+<PersonalCenterLayout
+  title="偏好设置 · 个人中心 MAX - 机场日志"
+  description="自定义您的个人昵称、专属图标、阅读字号，并可对本地收藏与浏览足迹进行完整 JSON 导出与备份。"
+  activeTab="settings"
+  pageHeading="偏好设置"
+>
+  <div class="personal-subpage-wrap">
+    <!-- Subpage Action Bar -->
+    <header class="subpage-header-card journal-card">
+      <div class="subpage-header-left">
+        <h1 class="subpage-main-h1">个人偏好与数据备份</h1>
+        <p class="subpage-desc">
+          所有设置与数据 100% 存储于您的本地设备。您可以随时修改身份标识，或将所有数据导出为 JSON 备份。
+        </p>
+      </div>
+    </header>
+
+    <!-- Settings Sections Stack -->
+    <main class="settings-sections-wrap">
+      <!-- Section 1: Profile Customization -->
+      <section class="journal-card settings-card">
+        <div class="settings-card-header">
+          <div class="header-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2454ED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div>
+            <h2 class="settings-h2">个人身份与专属头像</h2>
+            <p class="settings-sub">自定义您在本地显示的昵称与极简视觉头像</p>
+          </div>
+        </div>
+
+        <div class="settings-form-body">
+          <!-- Nickname -->
+          <div class="form-row">
+            <label for="inputNickname" class="form-label">访客昵称</label>
+            <div class="form-inline-group">
+              <input
+                type="text"
+                id="inputNickname"
+                class="form-text-input"
+                maxlength="20"
+                placeholder="例如：极客探索者"
+              />
+              <button type="button" id="btnSaveNickname" class="btn-form-action">
+                保存昵称
+              </button>
+            </div>
+            <span class="form-tip-msg" id="nicknameSaveMsg" style="display: none;">已成功保存</span>
+          </div>
+
+          <!-- Avatar Picker -->
+          <div class="form-row">
+            <label class="form-label">挑选专属视觉图标</label>
+            <div class="avatar-picker-grid" id="avatarPickerGrid">
+              <button type="button" class="avatar-pick-btn" data-avatar="plane" title="纸飞机">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
+                </svg>
+                <span class="avatar-title">客机</span>
+              </button>
+              <button type="button" class="avatar-pick-btn" data-avatar="compass" title="罗盘指南针">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+                <span class="avatar-title">罗盘</span>
+              </button>
+              <button type="button" class="avatar-pick-btn" data-avatar="rocket" title="火箭">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                  <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+                  <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                  <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                </svg>
+                <span class="avatar-title">极速</span>
+              </button>
+              <button type="button" class="avatar-pick-btn" data-avatar="globe" title="全球节点">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                <span class="avatar-title">全球</span>
+              </button>
+              <button type="button" class="avatar-pick-btn" data-avatar="cloud" title="高速云端">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+                </svg>
+                <span class="avatar-title">云端</span>
+              </button>
+              <button type="button" class="avatar-pick-btn" data-avatar="shield" title="安全盾牌">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span class="avatar-title">盾牌</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Privacy & Browsing History -->
+      <section class="journal-card settings-card">
+        <div class="settings-card-header">
+          <div class="header-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2454ED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="settings-h2">隐私与浏览足迹控制</h2>
+            <p class="settings-sub">控制是否记录浏览历史，并可一键清除已有足迹</p>
+          </div>
+        </div>
+
+        <div class="settings-form-body">
+          <div class="toggle-row">
+            <div>
+              <span class="toggle-title">开启浏览足迹记录</span>
+              <p class="toggle-desc">开启后将自动记录最近查看的 100 篇机场评测与使用教程，关闭后停止新增记录。</p>
+            </div>
+            <label class="switch-toggle" for="historyToggleSwitch">
+              <input type="checkbox" id="historyToggleSwitch" checked />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="clear-data-actions-row">
+            <button type="button" id="btnClearHistoryBtn" class="btn-outline-danger">
+              清空全部浏览历史
+            </button>
+            <button type="button" id="btnClearFavoritesBtn" class="btn-outline-danger">
+              清空全部品牌收藏
+            </button>
+            <button type="button" id="btnClearBookmarksBtn" class="btn-outline-danger">
+              清空全部文章书签
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Data Export / Import (Backup & Restore) -->
+      <section class="journal-card settings-card">
+        <div class="settings-card-header">
+          <div class="header-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2454ED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <div>
+            <h2 class="settings-h2">数据备份与迁移恢复 (JSON)</h2>
+            <p class="settings-sub">在不同设备或浏览器间无缝同步您的个人收藏与对比清单</p>
+          </div>
+        </div>
+
+        <div class="settings-form-body">
+          <p class="backup-info-text">
+            由于本站采用纯前端无服务器隐私架构，数据不会跨浏览器自动同步。您可以通过导出 JSON 文件在公司电脑、家用电脑或更换浏览器后直接导入还原。
+          </p>
+
+          <div class="backup-buttons-row">
+            <button type="button" id="btnExportJson" class="btn-primary-backup">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>导出备份数据 (JSON)</span>
+            </button>
+
+            <label class="btn-secondary-backup" for="importJsonFile">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>导入备份数据</span>
+              <input type="file" id="importJsonFile" accept=".json" style="display: none;" />
+            </label>
+
+            <button type="button" id="btnResetAllData" class="btn-text-danger">
+              重置所有数据
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</PersonalCenterLayout>
+
+<script>
+  import { UserStore } from '../../lib/user-store.ts';
+
+  const inputNick = document.getElementById('inputNickname') as HTMLInputElement | null;
+  const btnSaveNick = document.getElementById('btnSaveNickname');
+  const nickMsg = document.getElementById('nicknameSaveMsg');
+  const avatarBtns = document.querySelectorAll('#avatarPickerGrid .avatar-pick-btn') as NodeListOf<HTMLButtonElement>;
+  const historySwitch = document.getElementById('historyToggleSwitch') as HTMLInputElement | null;
+
+  const btnClearHist = document.getElementById('btnClearHistoryBtn');
+  const btnClearFav = document.getElementById('btnClearFavoritesBtn');
+  const btnClearBkm = document.getElementById('btnClearBookmarksBtn');
+
+  const btnExport = document.getElementById('btnExportJson');
+  const importInput = document.getElementById('importJsonFile') as HTMLInputElement | null;
+  const btnReset = document.getElementById('btnResetAllData');
+
+  function syncSettingsView() {
+    const profile = UserStore.getProfile();
+    const prefs = UserStore.getPreferences();
+
+    if (inputNick) inputNick.value = profile.nickname || '访客探索者';
+
+    avatarBtns.forEach(btn => {
+      const a = btn.dataset.avatar;
+      if (a === profile.avatar) {
+        btn.classList.add('selected');
+      } else {
+        btn.classList.remove('selected');
+      }
+    });
+
+    if (historySwitch) {
+      historySwitch.checked = prefs.historyEnabled;
+    }
+  }
+
+  // Save Nickname
+  if (btnSaveNick && inputNick) {
+    btnSaveNick.addEventListener('click', () => {
+      const val = inputNick.value.trim();
+      if (!val) {
+        alert('昵称不能为空');
+        return;
+      }
+      UserStore.setProfile({ nickname: val });
+      if (nickMsg) {
+        nickMsg.style.display = 'inline';
+        setTimeout(() => { nickMsg.style.display = 'none'; }, 2000);
+      }
+    });
+  }
+
+  // Select Avatar
+  avatarBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const a = btn.dataset.avatar!;
+      UserStore.setProfile({ avatar: a });
+      syncSettingsView();
+    });
+  });
+
+  // Toggle History Switch
+  if (historySwitch) {
+    historySwitch.addEventListener('change', () => {
+      UserStore.setPreferences({ historyEnabled: historySwitch.checked });
+    });
+  }
+
+  // Clear buttons
+  if (btnClearHist) {
+    btnClearHist.addEventListener('click', () => {
+      if (confirm('确认清空全部浏览足迹？')) {
+        UserStore.clearHistory();
+        alert('浏览历史已清空');
+      }
+    });
+  }
+  if (btnClearFav) {
+    btnClearFav.addEventListener('click', () => {
+      if (confirm('确认清空全部收藏的机场品牌？')) {
+        localStorage.setItem('airport_journal_favorites', JSON.stringify([]));
+        window.dispatchEvent(new CustomEvent('aj-user-store-updated', { detail: { key: 'favorites' } }));
+        alert('机场品牌收藏已清空');
+      }
+    });
+  }
+  if (btnClearBkm) {
+    btnClearBkm.addEventListener('click', () => {
+      if (confirm('确认清空全部文章书签？')) {
+        localStorage.setItem('airport_journal_bookmarks', JSON.stringify([]));
+        window.dispatchEvent(new CustomEvent('aj-user-store-updated', { detail: { key: 'bookmarks' } }));
+        alert('教程文章书签已清空');
+      }
+    });
+  }
+
+  // Export JSON
+  if (btnExport) {
+    btnExport.addEventListener('click', () => {
+      const json = UserStore.exportData();
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `airport-journal-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // Import JSON
+  if (importInput) {
+    importInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const text = evt.target?.result as string;
+        const res = UserStore.importData(text);
+        if (res.success) {
+          alert('数据备份已成功恢复！');
+          syncSettingsView();
+        } else {
+          alert(`导入失败：${res.message}`);
+        }
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  // Reset all
+  if (btnReset) {
+    btnReset.addEventListener('click', () => {
+      if (confirm('警告：此操作将清除所有本地收藏、足迹、偏好和对比数据并恢复默认，确认继续吗？')) {
+        UserStore.clearAllData();
+        alert('所有数据已重置为初始状态');
+        location.reload();
+      }
+    });
+  }
+
+  syncSettingsView();
+  window.addEventListener('aj-user-store-updated', () => {
+    syncSettingsView();
+  });
+</script>
+
+<style>
+  .personal-subpage-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Subpage Header Card */
+  .subpage-header-card {
+    padding: 24px 28px;
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+  }
+  .subpage-main-h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #142B48;
+    margin: 0 0 6px 0;
+  }
+  .subpage-desc {
+    font-size: 13.5px;
+    color: #647B95;
+    margin: 0;
+  }
+
+  /* Settings Sections */
+  .settings-sections-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .settings-card {
+    background: #FFFFFF;
+    border: 1px solid #DFE7F1;
+    border-radius: 16px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 8px rgba(20, 43, 72, 0.04);
+  }
+  .settings-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #F0F5FB;
+  }
+  .header-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #E8F0FE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .settings-h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #142B48;
+    margin: 0 0 4px 0;
+  }
+  .settings-sub {
+    font-size: 12.5px;
+    color: #647B95;
+    margin: 0;
+  }
+
+  .settings-form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .form-label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #142B48;
+  }
+  .form-inline-group {
+    display: flex;
+    gap: 10px;
+    max-width: 420px;
+  }
+  .form-text-input {
+    flex-grow: 1;
+    height: 40px;
+    padding: 0 14px;
+    background: #F8FAFD;
+    border: 1px solid #DFE7F1;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #142B48;
+    transition: all 0.2s ease;
+  }
+  .form-text-input:focus {
+    outline: none;
+    background: #FFFFFF;
+    border-color: #2454ED;
+    box-shadow: 0 0 0 3px rgba(36, 84, 237, 0.1);
+  }
+  .btn-form-action {
+    padding: 0 18px;
+    height: 40px;
+    background: #2454ED;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .btn-form-action:hover {
+    background: #173B9C;
+  }
+  .form-tip-msg {
+    font-size: 12px;
+    color: #16A34A;
+    font-weight: 600;
+  }
+
+  /* Avatar Picker */
+  .avatar-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    max-width: 540px;
+  }
+  .avatar-pick-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 8px;
+    background: #F8FAFD;
+    border: 2px solid #EDF2F7;
+    border-radius: 14px;
+    color: #647B95;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .avatar-pick-btn:hover {
+    background: #EFF6FF;
+    border-color: #BFDBFE;
+    color: #2454ED;
+  }
+  .avatar-pick-btn.selected {
+    background: #EFF6FF;
+    border-color: #2454ED;
+    color: #2454ED;
+  }
+  .avatar-title {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* Toggle Row */
+  .toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  .toggle-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #142B48;
+  }
+  .toggle-desc {
+    font-size: 12.5px;
+    color: #647B95;
+    margin: 4px 0 0 0;
+  }
+  .switch-toggle {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+  .switch-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #CBD5E1;
+    transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 26px;
+  }
+  .switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  input:checked + .switch-slider {
+    background-color: #2454ED;
+  }
+  input:checked + .switch-slider:before {
+    transform: translateX(20px);
+  }
+
+  .clear-data-actions-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 14px;
+    border-top: 1px solid #F0F5FB;
+  }
+  .btn-outline-danger {
+    padding: 8px 14px;
+    background: #FFF1F2;
+    border: 1px solid #FECDD3;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #E11D48;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-outline-danger:hover {
+    background: #FFE4E6;
+  }
+
+  /* Backup & Restore */
+  .backup-info-text {
+    font-size: 13.5px;
+    color: #647B95;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .backup-buttons-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding-top: 6px;
+  }
+  .btn-primary-backup {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #2454ED;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .btn-primary-backup:hover {
+    background: #173B9C;
+  }
+  .btn-secondary-backup {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #F0F5FB;
+    color: #142B48;
+    border: 1px solid #DFE7F1;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-secondary-backup:hover {
+    background: #E2EBF5;
+    color: #2454ED;
+  }
+  .btn-text-danger {
+    background: transparent;
+    border: none;
+    font-size: 13px;
+    color: #94A3B8;
+    cursor: pointer;
+    padding: 8px;
+    margin-left: auto;
+    transition: color 0.15s ease;
+  }
+  .btn-text-danger:hover {
+    color: #EF4444;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .avatar-picker-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .form-inline-group {
+      flex-direction: column;
+    }
+  }
+</style>

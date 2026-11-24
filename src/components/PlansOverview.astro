@@ -1,0 +1,182 @@
+---
+// Quick Overview Section for Plans & Pricing
+---
+
+<section class="overview-section" id="plans-overview">
+  <div class="container">
+    <div class="section-heading-bar">
+      <div class="section-heading-left">
+        <span class="heading-accent-bar"></span>
+        <h2 class="section-main-title">套餐信息与选型参考</h2>
+        <span class="section-sub-desc">主流机场套餐类型结构、流量阶梯与计费周期全解析</span>
+      </div>
+      <a href="#airports" class="section-more-link">
+        查看各品牌完整套餐表 <span>↓</span>
+      </a>
+    </div>
+
+    <div class="plans-overview-grid">
+      <div class="journal-card plan-type-card">
+        <div class="type-card-header">
+          <div class="type-icon-circle blue">月</div>
+          <div>
+            <h3 class="type-card-title">月度周期套餐</h3>
+            <span class="type-card-tag">日常稳定 / 试用首选</span>
+          </div>
+        </div>
+        <p class="type-card-desc">
+          按月付费与重置流量，通常从 100GB/月 到 1.5TB/月 不等，价格在 ¥20 ~ ¥180 之间。适合绝大多数影音娱乐与外贸办公用户。
+        </p>
+        <ul class="type-feature-list">
+          <li><strong>试错成本低：</strong> 单月订购便于评估晚高峰延迟与流媒体解锁。</li>
+          <li><strong>重置周期：</strong> 通常以 30 天为一个账单重置周期。</li>
+          <li><strong>典型代表：</strong> 灵动云、暮光加速、微风网络、飞猫云等。</li>
+        </ul>
+      </div>
+
+      <div class="journal-card plan-type-card">
+        <div class="type-card-header">
+          <div class="type-icon-circle teal">年</div>
+          <div>
+            <h3 class="type-card-title">轻量年付套餐</h3>
+            <span class="type-card-tag">高性价比 / 折扣明显</span>
+          </div>
+        </div>
+        <p class="type-card-desc">
+          单月分配 50GB ~ 100GB 基础流量，一次性收取一年费用（如 ¥99 ~ ¥199/年）。折合月单价非常低，适合轻度网页浏览与文字沟通。
+        </p>
+        <ul class="type-feature-list">
+          <li><strong>极低月均支出：</strong> 年付优惠力度大，适合长期备用。</li>
+          <li><strong>月度定额：</strong> 每月到期自动刷新当月配额，不结转下月。</li>
+          <li><strong>典型代表：</strong> 灵动云·穿云、暮光加速年付轻量版、微风年付等。</li>
+        </ul>
+      </div>
+
+      <div class="journal-card plan-type-card">
+        <div class="type-card-header">
+          <div class="type-icon-circle purple">包</div>
+          <div>
+            <h3 class="type-card-title">不限时一次性流量包</h3>
+            <span class="type-card-tag">随充随用 / 永不清零</span>
+          </div>
+        </div>
+        <p class="type-card-desc">
+          购买一次性固定流量（如 150GB、400GB、800GB），没有月度到期清零限制，用完为止。非常适合低频出海或多网冗余备用。
+        </p>
+        <ul class="type-feature-list">
+          <li><strong>无过期压力：</strong> 适合作为主力线路故障时的二道应急通道。</li>
+          <li><strong>按量计费逻辑：</strong> 只要账号未注销，余额持续有效。</li>
+          <li><strong>典型代表：</strong> 灵动云闲云/惊云/飞云包、微风网络不限时流量包等。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .overview-section {
+    padding: 36px 0;
+  }
+
+  .plans-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .plans-overview-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .plan-type-card {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .type-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .type-icon-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    flex-shrink: 0;
+  }
+
+  .type-icon-circle.blue {
+    background: linear-gradient(135deg, #285CF0 0%, #1E40AF 100%);
+  }
+
+  .type-icon-circle.teal {
+    background: linear-gradient(135deg, #0D9488 0%, #047857 100%);
+  }
+
+  .type-icon-circle.purple {
+    background: linear-gradient(135deg, #7C3AED 0%, #4338CA 100%);
+  }
+
+  .type-card-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--color-title);
+    line-height: 1.25;
+  }
+
+  .type-card-tag {
+    font-size: 0.76rem;
+    color: var(--color-muted);
+    font-weight: 600;
+  }
+
+  .type-card-desc {
+    font-size: 0.92rem;
+    color: var(--color-body);
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+
+  .type-feature-list {
+    list-style: none;
+    padding-left: 0;
+    font-size: 0.88rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+    border-top: 1px solid var(--color-border-light);
+    padding-top: 14px;
+  }
+
+  .type-feature-list li {
+    position: relative;
+    padding-left: 16px;
+    color: var(--color-muted);
+  }
+
+  .type-feature-list li strong {
+    color: var(--color-title);
+  }
+
+  .type-feature-list li::before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    color: var(--color-primary);
+    font-size: 1.2rem;
+    line-height: 1;
+    top: -2px;
+  }
+</style>

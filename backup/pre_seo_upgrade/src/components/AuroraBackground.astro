@@ -1,0 +1,207 @@
+---
+// Apple-style Aurora Gradient Background Component
+// Features 4 large drifting, breathing orbs in Glacier Ice Blue, Emerald Mint, Soft Lavender, and Cloud White
+---
+
+<div class="aurora-canvas-wrap" aria-hidden="true">
+  <!-- 4 Organic Aurora Orbs -->
+  <div class="aurora-orb orb-ice-blue"></div>
+  <div class="aurora-orb orb-emerald"></div>
+  <div class="aurora-orb orb-lavender"></div>
+  <div class="aurora-orb orb-cloud-white"></div>
+  
+  <!-- Subtle Frost Texture to prevent color banding and add silkiness -->
+  <div class="aurora-frost-veil"></div>
+</div>
+
+<style>
+  .aurora-canvas-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background-color: #F8FCFF; /* 冰川白基础背景 */
+    contain: strict;
+  }
+
+  .aurora-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    -webkit-filter: blur(90px);
+    will-change: transform, opacity;
+    pointer-events: none;
+    transform-origin: center center;
+  }
+
+  /* 01. 冰蓝光晕 (Ice Blue #C7E8FF) */
+  .orb-ice-blue {
+    top: -15vh;
+    left: -10vw;
+    width: 72vw;
+    height: 72vw;
+    max-width: 950px;
+    max-height: 950px;
+    background: radial-gradient(circle at 45% 45%, rgba(199, 232, 255, 0.85) 0%, rgba(199, 232, 255, 0.35) 45%, rgba(199, 232, 255, 0) 70%);
+    animation: drift-ice-blue 26s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
+  }
+
+  /* 02. 翡翠青光晕 (Emerald Mint #B8F5E2) */
+  .orb-emerald {
+    top: 5vh;
+    right: -12vw;
+    width: 65vw;
+    height: 65vw;
+    max-width: 880px;
+    max-height: 880px;
+    background: radial-gradient(circle at 55% 45%, rgba(184, 245, 226, 0.72) 0%, rgba(184, 245, 226, 0.28) 45%, rgba(184, 245, 226, 0) 70%);
+    animation: drift-emerald 23s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
+  }
+
+  /* 03. 淡紫光晕 (Soft Lavender #E2E5FF) */
+  .orb-lavender {
+    bottom: -18vh;
+    left: 8vw;
+    width: 75vw;
+    height: 75vw;
+    max-width: 980px;
+    max-height: 980px;
+    background: radial-gradient(circle at 50% 50%, rgba(226, 229, 255, 0.78) 0%, rgba(226, 229, 255, 0.30) 45%, rgba(226, 229, 255, 0) 70%);
+    animation: drift-lavender 29s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
+  }
+
+  /* 04. 云白光晕 (Cloud White #F8FCFF / 柔和高光) */
+  .orb-cloud-white {
+    top: 35vh;
+    right: 15vw;
+    width: 58vw;
+    height: 58vw;
+    max-width: 780px;
+    max-height: 780px;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(248, 252, 255, 0.55) 40%, rgba(248, 252, 255, 0) 72%);
+    animation: drift-cloud-white 21s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate;
+  }
+
+  /* 极细微磨砂防色阶层 */
+  .aurora-frost-veil {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(248, 252, 255, 0.45) 100%);
+    pointer-events: none;
+  }
+
+  /* 20-30s 平滑双向循环动画 (使用 GPU translate3d + scale + opacity，杜绝卡顿) */
+  @keyframes drift-ice-blue {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.85;
+    }
+    38% {
+      transform: translate3d(8vw, 6vh, 0) scale(1.12);
+      opacity: 0.72;
+    }
+    72% {
+      transform: translate3d(14vw, 14vh, 0) scale(0.96);
+      opacity: 0.88;
+    }
+    100% {
+      transform: translate3d(4vw, 18vh, 0) scale(1.06);
+      opacity: 0.76;
+    }
+  }
+
+  @keyframes drift-emerald {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.75;
+    }
+    32% {
+      transform: translate3d(-10vw, 8vh, 0) scale(1.08);
+      opacity: 0.86;
+    }
+    68% {
+      transform: translate3d(-18vw, 4vh, 0) scale(0.94);
+      opacity: 0.68;
+    }
+    100% {
+      transform: translate3d(-6vw, 12vh, 0) scale(1.04);
+      opacity: 0.80;
+    }
+  }
+
+  @keyframes drift-lavender {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.80;
+    }
+    40% {
+      transform: translate3d(12vw, -10vh, 0) scale(1.10);
+      opacity: 0.90;
+    }
+    75% {
+      transform: translate3d(6vw, -16vh, 0) scale(0.95);
+      opacity: 0.70;
+    }
+    100% {
+      transform: translate3d(-8vw, -8vh, 0) scale(1.05);
+      opacity: 0.82;
+    }
+  }
+
+  @keyframes drift-cloud-white {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.70;
+    }
+    50% {
+      transform: translate3d(-12vw, -12vh, 0) scale(1.16);
+      opacity: 0.88;
+    }
+    100% {
+      transform: translate3d(8vw, -6vh, 0) scale(0.92);
+      opacity: 0.65;
+    }
+  }
+
+  /* 移动端优化：减小模糊半径与不透明度，保障 60fps+ 流畅度 */
+  @media (max-width: 768px) {
+    .aurora-orb {
+      filter: blur(48px);
+      -webkit-filter: blur(48px);
+      opacity: 0.60;
+    }
+    .orb-ice-blue {
+      width: 85vw;
+      height: 85vw;
+      animation-duration: 30s;
+    }
+    .orb-emerald {
+      width: 80vw;
+      height: 80vw;
+      animation-duration: 28s;
+    }
+    .orb-lavender {
+      width: 88vw;
+      height: 88vw;
+      animation-duration: 32s;
+    }
+    .orb-cloud-white {
+      width: 70vw;
+      height: 70vw;
+      animation-duration: 26s;
+    }
+  }
+
+  /* 无障碍：尊重用户减少动态效果的系统偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .aurora-orb {
+      animation: none !important;
+      transform: none !important;
+      opacity: 0.65 !important;
+    }
+  }
+</style>

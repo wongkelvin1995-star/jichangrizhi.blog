@@ -1,0 +1,156 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read articles from content/articles/raw/ if any exist
+interface ArticleItem {
+  id: string;
+  title: string;
+  date: string;
+  contentHtml: string;
+}
+
+const articlesDir = path.resolve('content/articles/raw');
+let articles: ArticleItem[] = [];
+
+if (fs.existsSync(articlesDir)) {
+  const files = fs.readdirSync(articlesDir).filter(f => f.endsWith('.md'));
+  articles = files.map((f, idx) => {
+    const raw = fs.readFileSync(path.join(articlesDir, f), 'utf-8');
+    const titleMatch = raw.match(/^#\s+([^\r\n]+)/m);
+    const title = titleMatch ? titleMatch[1].trim() : f.replace('.md', '');
+    const dateMatch = raw.match(/日期[：:]\s*([0-9-]+)/);
+    const date = dateMatch ? dateMatch[1] : '2026-11-23';
+    const id = `article-${f.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase()}`;
+    return {
+      id,
+      title,
+      date,
+      contentHtml: raw.replace(/^#\s+[^\r\n]+/m, '').trim()
+    };
+  });
+}
+---
+
+<section class="articles-section" id="articles">
+  <div class="container">
+    <div class="section-heading-bar">
+      <div class="section-heading-left">
+        <span class="heading-accent-bar"></span>
+        <h2 class="section-main-title">文章日志</h2>
+        <span class="section-sub-desc">持续更新的机场行业资讯、线路深度评测与配置教程</span>
+      </div>
+    </div>
+
+    {articles.length > 0 ? (
+      <div class="articles-flow">
+        {articles.map(art => (
+          <article class="journal-card article-full-card" id={art.id}>
+            <header class="article-header">
+              <span class="badge-tag blue">文章日志</span>
+              <h3 class="article-title">{art.title}</h3>
+              <time class="article-date">{art.date}</time>
+            </header>
+            <div class="article-body">
+              <p>{art.contentHtml}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="journal-card articles-empty-card">
+        <div class="empty-icon-box">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <h3 class="empty-title">文章日志归档通道已就绪</h3>
+        <p class="empty-desc">
+          本站严格遵循真实性原则，未提供用户原创文章时<strong>绝不自动生成虚假 SEO 填充内容</strong>。后续将 `content/articles/raw/*.md` 放入对应目录即可在此无缝连续呈现。
+        </p>
+        <div class="empty-action">
+          <a href="#airports" class="btn btn-secondary">
+            继续浏览 17 家品牌档案全文 ↓
+          </a>
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .articles-section {
+    padding: 36px 0;
+  }
+
+  .articles-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .article-full-card {
+    padding: 32px;
+  }
+
+  .article-header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+  }
+
+  .article-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-title);
+    margin: 12px 0 6px 0;
+  }
+
+  .article-date {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  .article-body {
+    line-height: 1.8;
+    color: var(--color-body);
+  }
+
+  .articles-empty-card {
+    padding: 40px 24px;
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto;
+    background: #FFFFFF;
+  }
+
+  .empty-icon-box {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .empty-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-title);
+    margin-bottom: 10px;
+  }
+
+  .empty-desc {
+    font-size: 0.92rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+    margin-bottom: 24px;
+  }
+</style>

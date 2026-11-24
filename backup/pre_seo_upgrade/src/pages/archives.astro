@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BrandSection from '../components/BrandSection.astro';
+import BrandDirectory from '../components/BrandDirectory.astro';
+import { getAllBrands } from '../lib/brand-parser.ts';
+
+const brands = getAllBrands();
+
+const pageTitle = "机场档案大全 - 18家主流机场品牌详细资料与资费 | 2027 机场日志";
+const pageDescription = "2027 机场日志机场档案专区，完整收录灵动云、暮光加速、微风网络、大佬云、FLYV、飞猫云等18家机场品牌的深度档案、八大章节、套餐资费表格与各平台使用指南。";
+
+const archivesSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: 'https://jichangrizhi.blog/archives/'
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/archives/"
+  jsonLdSchema={[archivesSchema]}
+>
+  <div class="archives-page-container">
+    <!-- Header Banner -->
+    <section class="page-intro-banner">
+      <div class="container">
+        <div class="banner-badge-wrap">
+          <span class="badge-tag blue">全量档案库</span>
+          <span class="badge-tag success">收录 {brands.length} 家品牌</span>
+        </div>
+        <h1 class="page-main-h1">机场档案大全（{brands.length}家品牌）</h1>
+        <p class="page-intro-desc">
+          汇集 {brands.length} 家经过多方资料交叉核验的主流机场品牌完整档案。每份资料均完整保留基本信息、资费明细表格、节点覆盖、客户端兼容策略及专属常见问题解答。
+        </p>
+      </div>
+    </section>
+
+    <!-- Quick Directory TOC -->
+    <BrandDirectory brands={brands} />
+
+    <!-- All Brands Full Content -->
+    <section class="container archives-full-list" id="airports">
+      <div class="section-heading-bar">
+        <div class="section-heading-left">
+          <span class="heading-accent-bar"></span>
+          <h2 class="section-main-title">全部品牌档案正文（顺次展开）</h2>
+          <span class="section-sub-desc">已完整导入各品牌原始资料、八大章节、套餐明细表格与专属 FAQ</span>
+        </div>
+      </div>
+
+      <div class="brands-list-container">
+        {brands.map(brand => (
+          <BrandSection brand={brand} />
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .archives-page-container {
+    padding-bottom: 56px;
+  }
+
+  .page-intro-banner {
+    background: linear-gradient(180deg, #EFF6FF 0%, #F7FAFF 100%);
+    border-bottom: 1px solid var(--color-border);
+    padding: 48px 0 36px 0;
+  }
+
+  .banner-badge-wrap {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .page-main-h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--color-title);
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .page-main-h1 {
+      font-size: 1.75rem;
+    }
+  }
+
+  .page-intro-desc {
+    font-size: 1.05rem;
+    color: var(--color-muted);
+    max-width: 820px;
+    line-height: 1.7;
+  }
+
+  .archives-full-list {
+    margin-top: 24px;
+  }
+
+  .brands-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+</style>

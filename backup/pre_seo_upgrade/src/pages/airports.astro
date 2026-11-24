@@ -1,0 +1,351 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAllBrands } from '../lib/brand-parser.ts';
+import { BRAND_ORDER } from '../lib/brand-config.ts';
+
+const brands = getAllBrands();
+
+const pageTitle = "机场品牌目录与快速索引 - 2027 机场日志";
+const pageDescription = "2027 机场日志品牌目录，按序呈现 18 家机场品牌的核心特性、线路协议、节点地区与价格区间，方便快速查找。";
+
+// Merge order config with brand data
+const catalog = BRAND_ORDER.map(cfg => {
+  const brand = brands.find(b => b.id === cfg.id);
+  return {
+    order: cfg.order,
+    id: cfg.id,
+    name: cfg.name,
+    tagline: cfg.tagline,
+    badge: cfg.badge,
+    missing: cfg.missing || !brand,
+    brand
+  };
+});
+
+const catalogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: pageTitle,
+  description: pageDescription,
+  numberOfItems: catalog.length,
+  itemListElement: catalog.map((item, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: item.name,
+    url: `https://jichangrizhi.blog/airports/#${item.id}`
+  }))
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/airports/"
+  jsonLdSchema={[catalogSchema]}
+>
+  <div class="airports-catalog-page">
+    <!-- Header Banner -->
+    <section class="page-intro-banner">
+      <div class="container">
+        <div class="banner-badge-wrap">
+          <span class="badge-tag blue">收录全览</span>
+          <span class="badge-tag success">18 个品牌槽位（17家在录）</span>
+        </div>
+        <h1 class="page-main-h1">机场品牌目录与快速索引</h1>
+        <p class="page-intro-desc">
+          系统梳理当前收录的各大机场服务商，涵盖线路技术特征、节点覆盖地区、主流协议兼容性及基础价格门槛，助您高效建立全局对比。
+        </p>
+
+        <!-- Live Filter Input -->
+        <div class="catalog-filter-wrap">
+          <input
+            type="search"
+            id="catalogSearchInput"
+            placeholder="在目录中实时筛选品牌、节点、协议（如 灵动云、BGP、IPLC、Shadowsocks、香港）..."
+            class="catalog-search-input"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards Grid -->
+    <section class="container catalog-cards-section">
+      <div class="catalog-grid" id="catalogCardsGrid">
+        {catalog.map(item => (
+          item.missing ? (
+            <div class="journal-card catalog-card missing-card" data-keywords={`${item.name} 大佬云 待收录`}>
+              <div class="card-top-bar">
+                <span class="brand-num-badge">序位 {String(item.order).padStart(2, '0')}</span>
+                <span class="badge-tag warning">待收录</span>
+              </div>
+              <h2 class="catalog-card-h2">{item.name}</h2>
+              <p class="card-desc-text">
+                官方固定第 4 位展示槽位。目前尚未获得该品牌原始 Markdown 资料文件，严格遵循真实性准则，暂不开放正文阅读，拒绝编造虚假套餐。
+              </p>
+              <div class="card-footer-action">
+                <span class="action-disabled-note">资料核验中</span>
+              </div>
+            </div>
+          ) : (
+            <div class="journal-card catalog-card" data-keywords={`${item.name} ${item.brand?.englishName} ${item.brand?.lineTypes} ${item.brand?.nodeRegions} ${item.brand?.protocols} ${item.tagline}`.toLowerCase()}>
+              <div class="card-top-bar">
+                <span class="brand-num-badge">序位 {String(item.order).padStart(2, '0')}</span>
+                {item.badge && <span class="badge-tag blue">{item.badge}</span>}
+              </div>
+              <h2 class="catalog-card-h2">
+                <a href={`/#${item.id}`} class="catalog-brand-title-link">
+                  {item.name}
+                </a>
+              </h2>
+              {item.brand?.englishName && (
+                <div class="catalog-english-sub">{item.brand.englishName}</div>
+              )}
+              <p class="card-desc-text">
+                {item.brand?.introduction ? (item.brand.introduction.slice(0, 85) + '...') : item.tagline}
+              </p>
+
+              <div class="card-meta-tags">
+                {item.brand?.lineTypes && <span class="badge-tag blue">{item.brand.lineTypes.split(/[、,，]/)[0]}</span>}
+                {item.brand?.nodeRegions && <span class="badge-tag success">{item.brand.nodeRegions.split(/[、,，]/)[0]} 等地</span>}
+                {item.brand?.plans && item.brand.plans.length > 0 && (
+                  <span class="badge-tag">{item.brand.plans[0].price} 起</span>
+                )}
+              </div>
+
+              <div class="card-footer-action">
+                <a href={`/#${item.id}`} class="btn btn-primary btn-sm">
+                  查看完整档案 →
+                </a>
+                {item.brand?.registerUrl && (
+                  <a
+                    href={item.brand.registerUrl}
+                    target="_blank"
+                    rel="sponsored noopener noreferrer"
+                    class="btn btn-secondary btn-sm"
+                  >
+                    注册入口
+                  </a>
+                )}
+              </div>
+            </div>
+          )
+        ))}
+      </div>
+
+      <div id="noMatchCatalog" class="no-match-box" style="display: none;">
+        <p>未找到符合条件的品牌，请尝试其他关键词（如 香港、IPLC、月付 等）。</p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .airports-catalog-page {
+    padding-bottom: 60px;
+  }
+
+  .page-intro-banner {
+    background: linear-gradient(180deg, #F0F7FF 0%, #F7FAFF 100%);
+    border-bottom: 1px solid var(--color-border);
+    padding: 48px 0 36px 0;
+  }
+
+  .banner-badge-wrap {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .page-main-h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--color-title);
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .page-main-h1 {
+      font-size: 1.75rem;
+    }
+  }
+
+  .page-intro-desc {
+    font-size: 1.05rem;
+    color: var(--color-muted);
+    max-width: 820px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .catalog-filter-wrap {
+    max-width: 680px;
+  }
+
+  .catalog-search-input {
+    width: 100%;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(226, 232, 240, 0.85);
+    border-radius: var(--radius-full);
+    font-size: 0.95rem;
+    color: var(--color-title);
+    outline: none;
+    transition: var(--transition-base);
+    box-shadow: 0 4px 16px -2px rgba(19, 35, 68, 0.04);
+  }
+
+  .catalog-search-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(40, 92, 240, 0.15);
+  }
+
+  /* Catalog Grid */
+  .catalog-cards-section {
+    margin-top: 36px;
+  }
+
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 990px) {
+    .catalog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .catalog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .catalog-card {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .brand-num-badge {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    background: var(--color-title);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+  }
+
+  .catalog-card-h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-title);
+    margin-bottom: 4px;
+  }
+
+  .catalog-brand-title-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .catalog-brand-title-link:hover {
+    color: var(--color-primary);
+  }
+
+  .catalog-english-sub {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-bottom: 10px;
+  }
+
+  .card-desc-text {
+    font-size: 0.9rem;
+    color: var(--color-body);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex-grow: 1;
+  }
+
+  .card-meta-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .card-footer-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-sm {
+    padding: 6px 14px;
+    font-size: 0.86rem;
+  }
+
+  .missing-card {
+    background: #F8FAFC;
+    border-style: dashed;
+  }
+
+  .action-disabled-note {
+    font-size: 0.84rem;
+    color: var(--color-muted);
+  }
+
+  .no-match-box {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--color-muted);
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    border-radius: var(--radius-lg);
+  }
+</style>
+
+<script>
+  // Filter catalog cards in real time
+  const input = document.getElementById('catalogSearchInput') as HTMLInputElement | null;
+  const cards = document.querySelectorAll<HTMLElement>('.catalog-card');
+  const noMatch = document.getElementById('noMatchCatalog');
+
+  if (input) {
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      let matchedCount = 0;
+
+      cards.forEach(card => {
+        const keywords = card.dataset.keywords || '';
+        if (!q || keywords.includes(q)) {
+          card.style.display = 'flex';
+          matchedCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (noMatch) {
+        noMatch.style.display = matchedCount === 0 ? 'block' : 'none';
+      }
+    });
+  }
+</script>
