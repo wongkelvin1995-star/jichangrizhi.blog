@@ -203,6 +203,11 @@ export function parseBrandMarkdown(content: string, brandId: string, orderNum: n
     const secBody = trimmed.replace(/^##\s*(\d+)\.\s*[^\r\n]+/, '').trim();
     const secId = `${brandId}-section-${secNum}`;
 
+    // Skip Section 8 (来源与更新) - internal audit & source metadata should not be rendered publicly
+    if (secNum === '8' || secTitle.includes('来源与更新')) {
+      continue;
+    }
+
     let secContentHtml = '';
 
     // Check if this is Section 2 (套餐价格) with Markdown table
@@ -338,7 +343,7 @@ export function parseBrandMarkdown(content: string, brandId: string, orderNum: n
   // Q8: 数据来源与真实核实日期
   faqList.push({
     question: `本站关于 ${brandName} 的档案资料是如何核实的？来源与日期是什么？`,
-    answer: `本站收录的 ${brandName} 资料核实日期为：${source.verifyDate}。数据来源基于：${source.infoSource || '官方展示站及公开资料比对'}。特别提示：机场服务商的套餐资费、节点可用性与网络线路可能随时随运营发生调整，本站内容记录历史核验状态，仅供参考，不作为官方直接履约证明。`
+    answer: `本站收录的 ${brandName} 资料核实日期为：${source.verifyDate}。数据来源基于官方站点、控制台及公开网络测试样本交叉比对。特别提示：机场服务商的套餐资费、节点可用性与网络线路可能随时随运营发生调整，本站内容记录历史核验状态，仅供参考，不作为官方直接履约证明。`
   });
 
   return {

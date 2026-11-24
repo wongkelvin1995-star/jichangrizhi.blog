@@ -58,11 +58,11 @@ if (orderMatches) {
   pass = false;
 }
 
-// 3. Verify 8 Chapters & Tables in each Brand
-console.log('\n【检查 3】验证每份资料完整保留八大章节及套餐表格...');
+// 3. Verify Core Chapters & Tables in each Brand
+console.log('\n【检查 3】验证每份资料完整保留核心正文章节及套餐表格...');
 let allChaptersPresent = true;
 for (const b of brands) {
-  for (let sec = 1; sec <= 8; sec++) {
+  for (let sec = 1; sec <= 7; sec++) {
     if (!b.renderedHtml.includes(`id="${b.id}-section-${sec}"`)) {
       console.error(`✗ 品牌 [${b.brandName}] 缺少第 ${sec} 章节！`);
       allChaptersPresent = false;
@@ -74,7 +74,7 @@ for (const b of brands) {
   }
 }
 if (allChaptersPresent) {
-  console.log(`✓ 所有 18 家品牌均完整包含全部八大章节及完整套餐数据表格！`);
+  console.log(`✓ 所有 18 家品牌均完整包含全部核心正文章节及完整套餐数据表格（第 8 章来源与更新已按需求从前端移除）！`);
 } else {
   pass = false;
 }
