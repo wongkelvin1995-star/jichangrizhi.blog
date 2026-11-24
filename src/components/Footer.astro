@@ -56,11 +56,11 @@ const currentYear = 2027;
   </div>
 
   <!-- Floating Back-to-Top Button -->
-  <a href="#top" id="backToTopBtn" class="back-to-top" aria-label="返回页面顶部">
+  <button type="button" id="backToTopBtn" class="back-to-top" aria-label="返回页面顶部" title="返回页面顶部">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
-  </a>
+  </button>
 </footer>
 
 <style>
@@ -170,48 +170,88 @@ const currentYear = 2027;
 
   .back-to-top {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 28px;
+    right: 28px;
     width: 44px;
     height: 44px;
     border-radius: 50%;
     background: #FFFFFF;
-    border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-md);
-    color: var(--color-title);
+    border: 1px solid #DFE7F1;
+    box-shadow: 0 4px 16px rgba(20, 43, 72, 0.08);
+    color: #142B48;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99;
-    transition: var(--transition-base);
-    text-decoration: none;
+    z-index: 995;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
     opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px) scale(0.92);
+    outline: none;
+    padding: 0;
+  }
+
+  .back-to-top svg {
     pointer-events: none;
+    transition: transform 0.2s ease;
   }
 
   .back-to-top.visible {
     opacity: 1;
-    pointer-events: auto;
+    visibility: visible;
+    transform: translateY(0) scale(1);
   }
 
   .back-to-top:hover {
-    background: var(--color-primary);
+    background: #2454ED;
+    border-color: #2454ED;
     color: #FFFFFF;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(40, 92, 240, 0.35);
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 20px rgba(36, 84, 237, 0.3);
+  }
+
+  .back-to-top:hover svg {
+    transform: translateY(-2px);
+  }
+
+  .back-to-top:active {
+    transform: translateY(-1px) scale(0.98);
+  }
+
+  @media (max-width: 768px) {
+    .back-to-top {
+      bottom: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+    }
   }
 </style>
 
 <script>
-  // Show / hide back-to-top button on scroll
+  // Show / hide back-to-top button on scroll & smooth scroll on click
   const backBtn = document.getElementById('backToTopBtn');
   if (backBtn) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 400) {
+    const checkScroll = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      if (scrollY > 260) {
         backBtn.classList.add('visible');
       } else {
         backBtn.classList.remove('visible');
       }
-    }, { passive: true });
+    };
+
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll();
+
+    backBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    });
   }
 </script>
